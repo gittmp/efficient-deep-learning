@@ -8,9 +8,12 @@
 \usepackage{amsmath}
 \usepackage{emptypage}
 \usepackage{array}
-
 \usepackage{graphicx}
 \graphicspath{{./resources/}} 
+
+\usepackage[table, xcdraw]{xcolor}
+% \setlength{\tabcolsep}{7pt}
+\renewcommand{\arraystretch}{1.3}
 
 \usepackage{setspace}
 \onehalfspacing
@@ -114,11 +117,11 @@
 
         \textbf{\\Outline of research:} 
         \begin{itemize}
-            \item \underline{Chapter \ref{section: baseline}: \emph{Baseline finanical volatility model}}. An initial deep model will be implemented, using a traditional training process and LSTM architecture, to act as an exemplar of the resource requirements of this domain.
+            \item \underline{Section \ref{section: baseline}: \emph{Baseline finanical volatility model}}. An initial deep model will be implemented, using a traditional training process and LSTM architecture, to act as an exemplar of the resource requirements of this domain.
 
-            \item \underline{Chapter \ref{section: energy-extensions}: \emph{Energy-efficient training extensions}}. Several adaptations to the model training process will be made that prioritise reducing the energy consumed by the system.
+            \item \underline{Section \ref{section: energy-extensions}: \emph{Energy-efficient training extensions}}. Several adaptations to the model training process will be made that prioritise reducing the energy consumed by the system.
             
-            \item \underline{Chapter \ref{section: data-extensions}: \emph{Data-efficient training extensions}}. Additional adaptations will be made that reduce the necessary amount of training data, further lowering resource requirements.
+            \item \underline{Section \ref{section: data-extensions}: \emph{Data-efficient training extensions}}. Additional adaptations will be made that reduce the necessary amount of training data, further lowering resource requirements.
             
             \item \underline{Chapter \ref{chapter: evaluation}: \emph{Discussion \& evaluation}}. An analysis will be made between the baseline and extended models, comparing the performance and efficiency of each, and discussing their success in reducing resource requirements.
         \end{itemize}
@@ -248,11 +251,11 @@
     \begin{itemize}
         \item \underline{Chapter \ref{chapter: literature}: \emph{Literature review}}. The relevant literature to this research is first explored to give an overview of the key concepts and methodologies utilised in the following experimentation. This begins with a general exploration of machine learning, which then leads to a more refined discussion of the use of DL in finance, and the specific DL methods and concepts focussed upon within this thesis, giving a clear outline of the domain of financial volatility forecasting. Following this, the review explores the research domain of Green AI, with a focus on the specific methods and practices used in Green AI research which will go on to be a core aspect of this thesis.
         
-        \item \underline{Chapter \ref{section: baseline}: \emph{Baseline finanical volatility model}}. An explanation and analysis of the baseline volatility model implemented, exemplifying the typical models, methods, and resource requirements of this domain.
+        \item \underline{Section \ref{section: baseline}: \emph{Baseline finanical volatility model}}. An explanation and analysis of the baseline volatility model implemented, exemplifying the typical models, methods, and resource requirements of this domain.
 
-        \item \underline{Chapter \ref{section: energy-extensions}: \emph{Energy-efficient training extensions}}. Once the baseline model has been implemented, several energy-efficient adaptations to its training process shall be explored. This section gives a complete overview of these methods, explaining how they work, the motivations behind their use, and their utility in decreasing the energy consumption of training.
+        \item \underline{Section \ref{section: energy-extensions}: \emph{Energy-efficient training extensions}}. Once the baseline model has been implemented, several energy-efficient adaptations to its training process shall be explored. This section gives a complete overview of these methods, explaining how they work, the motivations behind their use, and their utility in decreasing the energy consumption of training.
         
-        \item \underline{Chapter \ref{section: data-extensions}: \emph{Data-efficient training extensions}}. The utilised methods to reduce the data requirements of training are then be explored, discussing their origins within Green AI, explaining how they work, and evaluating their effectiveness.
+        \item \underline{Section \ref{section: data-extensions}: \emph{Data-efficient training extensions}}. The utilised methods to reduce the data requirements of training are then be explored, discussing their origins within Green AI, explaining how they work, and evaluating their effectiveness.
         
         \item \underline{Chapter \ref{chapter: evaluation}: \emph{Discussion \& evaluation}}. Once the detail of the utilised model and extensions has been thoroughly explained, the results of the experimentation are discussed, evaluating the accuracy and efficiency of each method to deduce the success of the application of Green AI to finance.
     \end{itemize}
@@ -346,7 +349,7 @@
     \begin{figure}[ht]
         \label{fig: deep-rnn}
         \centering
-        \includegraphics[width=0.7\textwidth]{rnn.png}
+        \includegraphics[width=0.4\textwidth]{deep-rnn.png}
         \caption{\centering Diagram of a multi-layer RNN (showing layers $1$ to $L$) with each layer unrolled in time between timesteps $1$ and $T$}
     \end{figure}
 
@@ -463,7 +466,7 @@
 
     \subsection{Forecasting Financial Risk}
 
-    The challenges associated with market price prediction mean that within the finance industry a more helpful use case of sequence-to-sequence modelling is forecasting financial risk. In their white paper explaining the applications and benefits of ML for financial modelling, \citet{laplante-2019} exemplify this sentiment, asserting that ANNs provide the most utility for highlighting potential risks, not explicitly modelling variable movements. In fact, a recent survey of financial professionals by \citet{chartis-2019} found that $73\%$ of respondents use ML tools in the financial risk sector, majoritively for analysing ``market risk for the trading book" ($51\%$ of respondents) and ``market risk for the banking book" ($44\%$). This trend is echoed by \citet{peng-2021} in their review of Fintech, DL, and financial risk; they assert that modelling risk is currently in high demand due to the large fluctuations, uncertainty, and high volatility exhibited in financial markets, making risk an important consideration when making financial decisions. Furthermore, \citet{mashrur-2020} highlight that financial market risk typically exhibits identifiable trends as risk patterns reoccur in cycles, facilitating accurate modelling based upon historical data.
+    The challenges associated with market price prediction mean that within the finance industry a more helpful use case of sequence-to-sequence modelling is forecasting financial risk. In their white paper explaining the applications and benefits of ML for financial modelling, \citet{laplante-2019} exemplify this sentiment, asserting that ANNs provide the most utility for highlighting potential risks, not explicitly modelling variable movements. In fact, a recent survey of financial professionals by \citet{chartis-2019} found that $70\%$ of respondents use ML tools in the financial risk sector, majoritively for analysing ``market risk for the trading book" ($51\%$ of respondents) and ``market risk for the banking book" ($44\%$). This trend is echoed by \citet{peng-2021} in their review of Fintech, DL, and financial risk; they assert that modelling risk is currently in high demand due to the large fluctuations, uncertainty, and high volatility exhibited in financial markets, making risk an important consideration when making financial decisions. Furthermore, \citet{mashrur-2020} highlight that financial market risk typically exhibits identifiable trends as risk patterns reoccur in cycles, facilitating accurate modelling based upon historical data.
 
     For these reasons, modelling financial market risk is a popular application of DL. This typically involves the development of statistical models to forecast trends within different risk measures such as \emph{value-at-risk} (VaR) and \emph{volatility} \citep{peng-2021}. VaR estimates the value an asset is likely to lose over a given time period, to a specified confidence level, returning a value that indicates the maximum expected loss over that period at that confidence level. This metric has long been considered a valuable method of measuring market risk, with a vast spectrum of research covering its computation and use \citep{khindanova-2000}. Furthermore, studies such as that of \citet{sun-2009} have shown that ANNs provide superior forecasting of VaR than other models; this has established VaR popular choice for recent DL models aiming to forecast market risk using DNNs. For example, \citet{du-2019} proposed an RNN-based model for estimating VaR, showing that this approach provides a flexible architecture and improved prediction accuracy.
 
@@ -628,7 +631,6 @@
     Hence, previous research has demonstrated the utility of active learning in reducing the data constraints of training DNNs, and thus this method is of vital importance to work within Green AI. Furthermore, whilst active learning over time series introduces further complexity due to the temporal nature of variables, approaches such as \citet{peng-2017} and \citet{zimmer-2018} have demonstrated its feasibility in this field, meaning there is significant potential for active learning to help improve the data and energy efficiency of high-performance sequential models such as those used within Fintech.
 
 
-
     % --------------------  EXPERIMENTS ----------------------
     \newpage
     \chapter{Experiments}
@@ -636,6 +638,31 @@
 
     \section{Baseline Financial Volatility Model}
     \label{section: baseline}
+
+
+    \begin{table}[ht]
+        \centering
+        \label{table: time-series}
+        \begin{tabular}{|l|lllllll|} 
+            \hline
+            \textbf{Timestep} & \textbf{Open} & \textbf{Close} & \textbf{High} & \textbf{Low} & \textbf{Volume} & \textbf{Return} & \textbf{Volatility}  \\ 
+            \hline
+            2022-08-01 & 0.855942 & 0.855188 & 0.856735 & 0.853413 & 0.309027 & -0.025801 & 0.140913    \\ 
+            \hline
+            2022-07-29 & 0.850728 & 0.857619 & 0.855739 & 0.849899 & 0.333186 & 0.128754  & 0.145031    \\ 
+            \hline
+            2022-07-28 & 0.837990 & 0.845556 & 0.843038 & 0.831855 & 0.338870 & 0.110068  & 0.147466    \\ 
+            \hline
+            2022-07-27 & 0.822442 & 0.835378 & 0.834864 & 0.823165 & 0.312798 & 0.235645  & 0.129777    \\ 
+            \hline
+            2022-07-26 & 0.822814 & 0.813996 & 0.816945 & 0.814652 & 0.269089 & -0.105961 & 0.126826    \\
+            \hline
+        \end{tabular}
+        \caption{\centering The final 5 timesteps of the multivariate time series (in reverse chronological order).}
+    \end{table}
+
+
+
 
     \section{Energy-Efficient Training Extensions}
     \label{section: energy-extensions}
