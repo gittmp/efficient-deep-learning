@@ -288,7 +288,7 @@
         a^{(i)}_n = \alpha( W^{(i-1, i)} \cdot x^{(i-1)} + b^{(i)} )
     \end{equation}
 
-    This computation is performed over all layers of the network, starting with the input layer---whose neurons take the values of the input vector---and propagating through to the output layer—the values of which are the final network output. During training, the values of the network's parameters (i.e. the elements of weight matrix $W$ and bias vector $b$) are adjusted as the model learns, manipulating its outputs to more closely align with the true labels. \emph{Backpropagation} can be used to implement this tuning process, where the gradient of loss function with respect to the parameters is determined by propagating the error of the network on the current input backwards through all its layers \citep{zaras-2022}. These parameters can then be adjusted in the direction of the negative gradient through \emph{gradient descent} (towards the minimum of the loss function).
+    This computation is performed over all layers of the network, starting with the input layer---whose neurons take the values of the input vector---and propagating through to the output layer—the values of which are the final network output. During training, the values of the network's parameters (i.e. the elements of weight matrix $W$ and bias vector $b$) are adjusted as the model learns, manipulating its outputs to more closely align with the true labels. The full training process is typically implemented over a predetermined number of iterations. Within each iteration (known as an \emph{epoch}) subsets of data of a given size (referred to as the \emph{batch size}) are sampled from the training dataset and fed into the network, over which the aforementioned computations are made and the network's parameters tuned. \emph{Backpropagation} can be used to implement this tuning process, where the gradient of loss function with respect to the parameters is determined by propagating the error of the network on the current input backwards through all its layers \citep{zaras-2022}. These parameters can then be adjusted in the direction of the negative gradient through \emph{gradient descent} (towards the minimum of the loss function).
 
 
     \subsection{Sequence Modelling Problems}
@@ -667,18 +667,18 @@
 
     \begin{table}[ht]
         \centering
-        \label{table: baseline-lstm}
+        \label{table: hyperparams}
         \begin{tabular}{|lll|} 
             \hline
             \textbf{Layer Type} & \textbf{Output Shape} & \textbf{Parameter Count}  \\ 
             \hline
-            LSTM           & (10, 128)             & 69632                \\ 
+            LSTM           & (10, -)             & -                \\ 
             \hline
-            LSTM           & (10, 128)             & 131584               \\ 
+            LSTM           & (10, -)             & -               \\ 
             \hline
-            LSTM           & (10, 128)             & 131584               \\ 
+            LSTM           & (10, -)             & -               \\ 
             \hline
-            FCN            & (1)                   & 129                  \\
+            FCN            & (1)                   & -                  \\
             \hline
         \end{tabular}
 
