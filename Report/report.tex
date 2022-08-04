@@ -658,11 +658,32 @@
             2022-07-26 & 0.822814 & 0.813996 & 0.816945 & 0.814652 & 0.269089 & -0.105961 & 0.126826    \\
             \hline
         \end{tabular}
+
         \caption{\centering The final 5 timesteps of the multivariate time series (in reverse chronological order).}
     \end{table}
 
 
 
+
+    \begin{table}[ht]
+        \centering
+        \label{table: baseline-lstm}
+        \begin{tabular}{|lll|} 
+            \hline
+            \textbf{Layer Type} & \textbf{Output Shape} & \textbf{Parameter Count}  \\ 
+            \hline
+            LSTM           & (10, 128)             & 69632                \\ 
+            \hline
+            LSTM           & (10, 128)             & 131584               \\ 
+            \hline
+            LSTM           & (10, 128)             & 131584               \\ 
+            \hline
+            FCN            & (1)                   & 129                  \\
+            \hline
+        \end{tabular}
+
+        \caption{\centering Architecture of Baseline LSTM Model}
+    \end{table}
 
     \section{Energy-Efficient Training Extensions}
     \label{section: energy-extensions}
