@@ -1,4 +1,4 @@
-# Sustainable Risk Modelling (Thesis 2022)
+# Energy-Efficient Deep Learning for Finance
 
 This thesis investigates the use of energy-efficient methods for deep learning-based financial volatility forecasting, aiming to reduce the energetic cost of such models and demonstrate how the sustainability of deep learning for finance can be improved.
 
