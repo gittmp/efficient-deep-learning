@@ -932,6 +932,51 @@
 
     \section{Results}
 
+    \subsection{Baseline Model}
+
+
+    \begin{table}
+        \centering
+        \label{table: efficiency}
+        \caption{Efficiency results for all methods}
+        \begin{tabular}{|l|l|l|l|l|} 
+        \hline
+        \textbf{Method}                                                               & \begin{tabular}[c]{@{}l@{}}\textbf{Total Training}\\\textbf{Time (s)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Pre-Training}\\\textbf{Time (s)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Tuning }\\\textbf{Time (s)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Memory }\\\textbf{Usage (MB)}\end{tabular}  \\ 
+        \hline
+        Baseline                                                                      &                                                                                    & -                                                                                & -                                                                           &                                                                                \\ 
+        \hline
+        Mixed-precision                                                               &                                                                                    & -                                                                                & -                                                                           &                                                                                \\ 
+        \hline
+        \begin{tabular}[c]{@{}l@{}}Supervised \\layer-wise pre-training\end{tabular}  &                                                                                    &                                                                                  &                                                                             &                                                                                \\ 
+        \hline
+        \begin{tabular}[c]{@{}l@{}}Unsupervised\\layer-wise~pre-training\end{tabular} &                                                                                    &                                                                                  &                                                                             &                                                                                \\ 
+        \hline
+        Active learning                                                               &                                                                                    & -                                                                                & -                                                                           &                                                                                \\
+        \hline
+        \end{tabular}
+    \end{table}
+
+
+    \begin{table}
+        \centering
+        \label{table: accuracy}
+        \caption{Accuracy data for all methods (over test datset)}
+        \begin{tabular}{|l|l|l|l|l|} 
+        \hline
+        \textbf{Method}                                                               & $\mathbf{R^2}$ & \textbf{MAE} & \textbf{RMSE} & \textbf{MAPE (\%)}  \\ 
+        \hline
+        Baseline                                                                      & 0.982 & 0.00785      & 0.0122        & 10.9                \\ 
+        \hline
+        Mixed-precision                                                               & 0.982 & 0.00734      & 0.0123        & 10.8                \\ 
+        \hline
+        \begin{tabular}[c]{@{}l@{}}Supervised\\layer-wise pre-training\end{tabular}   & 0.983 & 0.00627      & 0.0120        & 9.47                \\ 
+        \hline
+        \begin{tabular}[c]{@{}l@{}}Unsupervised\\layer-wise pre-training\end{tabular} & 0.975 & 0.00940      & 0.0146        & 14.2                \\ 
+        \hline
+        Active Learning                                                               &       &              &               &                     \\
+        \hline
+        \end{tabular}
+    \end{table}
 
     
 
