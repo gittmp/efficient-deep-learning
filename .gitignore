@@ -1,7 +1,11 @@
-*/Report*
+/Report*
 !/Report/resources/*
 !/Report/report.pdf
 !/Report/report.tex
+
+Program/results_*
+Program/active-learning.ipynb
+Program/turbulence_and_systematic_risk.ipynb
 
 .DS_Store
 .vscode
