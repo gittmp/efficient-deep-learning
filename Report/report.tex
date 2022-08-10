@@ -723,7 +723,7 @@
 
     To conduct volatility forecasting over the chosen domain, an LSTM-based DNN was implemented. This recurrent architecture was chosen as RNNs and LSTMs have been shown to produce superior accuracy when forecasting time series in computational finance and further afield. Namely, both \citet{lipton-2015} and \citet{yu-2019} identified that the majority of recent advances within sequence modelling have been facilitated by LSTMs, with successful LSTM-based models being implemented across financial applications including forecasting S\&P 500 prices \citep{fjellstrom-2022}. This research has proven the capability of LSTMs to produce state-of-the-art modelling accuracy by effectively modelling both long and short-term dependencies in sequences, and capturing complex dependencies between highly variable features. Furthermore, these architectures have been successfully applied to forecasting financial market volatility, with \citet{ge-2022} finding 9 out of 21 surveyed pure models used RNNs, and \citet{bucci-2020} showing that LSTMs outperform other traditional methods for forecasting RV over S\&P 500 data. Hence, to act as a baseline model that is characteristic of typical DNNs used for forecasting HV, an LSTM architecture was chosen.
 
-    Devising a specific configuration of hyperparameters for the LSTM model was similarly done by surveying the literature base of LSTM-based volatility forecasting, and constructing a hyperparameter set that was representative of typical models in this field. The hyperparameters of the model that were determined in this manner are as follows: \emph{number of layers}, \emph{neurons per layer}, \emph{learning rate}, \emph{epochs}, and \emph{batch size}. First, existing models were used to determine the number of LSTM layers to implement within the deep model. The reviewed DNNs were found to typically exploit between 1 \citep{bucci-2020} and 5 \citep{kim-2018} layers; therefore, to strike a balance between these implementations, the model proposed in this thesis relies on $3$ LSTM layers. Each of these hidden layers contains $16$ neurons, as existing implementations typically include 5--25 neurons per layer (Table \ref{table: architecture} enumerates the full architecture). Since the output layer is simply used to output the predicted volatility at a single timestep $t+1$ (by assembling all outputs of the final LSTM layer), this layer consists of a single neuron fully connected to its preceding hidden layer, from which the network's single output value (the forecast volatility $\hat{v}_{t+1}$) is read.
+    Devising a specific configuration of hyperparameters for the LSTM model was similarly done by surveying the literature base of LSTM-based volatility forecasting, and constructing a hyperparameter set that was representative of typical models in this field. The hyperparameters of the model that were determined in this manner are as follows: \emph{number of layers}, \emph{neurons per layer}, \emph{learning rate}, \emph{epochs}, and \emph{batch size}. First, existing models were used to determine the number of LSTM layers to implement within the deep model. The reviewed DNNs were found to typically exploit between 1 \citep{bucci-2020} and 5 \citep{kim-2018} layers; therefore, to strike a balance between these implementations, the model proposed in this thesis relies on $3$ LSTM layers. Each of these hidden layers contains $24$ neurons, as existing implementations typically include 5--25 neurons per layer (Table \ref{table: architecture} enumerates the full architecture). Since the output layer is simply used to output the predicted volatility at a single timestep $t+1$ (by assembling all outputs of the final LSTM layer), this layer consists of a single neuron fully connected to its preceding hidden layer, from which the network's single output value (the forecast volatility $\hat{v}_{t+1}$) is read.
 
 
     \begin{table}[ht]
@@ -735,11 +735,11 @@
             \hline
             Input           & $(batch\_size, 10, 7)$             & -                \\ 
             \hline
-            LSTM           & $(batch\_size, 10, -)$             & -                \\ 
+            LSTM           & $(batch\_size, 10, 24)$             & -                \\ 
             \hline
-            LSTM           & $(batch\_size, 10, -)$             & -               \\ 
+            LSTM           & $(batch\_size, 10, 24)$             & -               \\ 
             \hline
-            LSTM           & $(batch\_size, 10, -)$             & -               \\ 
+            LSTM           & $(batch\_size, 10, 24)$             & -               \\ 
             \hline
             FCN            & $(batch\_size, 1)$                   & -                  \\
             \hline
@@ -977,6 +977,14 @@
         \hline
         \end{tabular}
     \end{table}
+
+
+    \begin{figure}[ht]
+        \label{fig: predictions}
+        \centering
+        \includegraphics[width=0.8\textwidth]{traintest-split.png}
+        \caption{\centering Predicted volatility time series of each tested model (orange dashed line) against the true volatility time series (blue)}
+    \end{figure}
 
     
 
