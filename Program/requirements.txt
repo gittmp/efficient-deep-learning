@@ -6,3 +6,4 @@ yfinance
 tensorflow
 sklearn
 line_profiler
+memory_profiler
