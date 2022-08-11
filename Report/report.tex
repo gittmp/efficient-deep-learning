@@ -720,10 +720,11 @@
 
 
     \subsection{Model Approach}
+    \label{section: model-architecture}
 
     To conduct volatility forecasting over the chosen domain, an LSTM-based DNN was implemented. This recurrent architecture was chosen as RNNs and LSTMs have been shown to produce superior accuracy when forecasting time series in computational finance and further afield. Namely, both \citet{lipton-2015} and \citet{yu-2019} identified that the majority of recent advances within sequence modelling have been facilitated by LSTMs, with successful LSTM-based models being implemented across financial applications including forecasting S\&P 500 prices \citep{fjellstrom-2022}. This research has proven the capability of LSTMs to produce state-of-the-art modelling accuracy by effectively modelling both long and short-term dependencies in sequences, and capturing complex dependencies between highly variable features. Furthermore, these architectures have been successfully applied to forecasting financial market volatility, with \citet{ge-2022} finding 9 out of 21 surveyed pure models used RNNs, and \citet{bucci-2020} showing that LSTMs outperform other traditional methods for forecasting RV over S\&P 500 data. Hence, to act as a baseline model that is characteristic of typical DNNs used for forecasting HV, an LSTM architecture was chosen.
 
-    Devising a specific configuration of hyperparameters for the LSTM model was similarly done by surveying the literature base of LSTM-based volatility forecasting, and constructing a hyperparameter set that was representative of typical models in this field. The hyperparameters of the model that were determined in this manner are as follows: \emph{number of layers}, \emph{neurons per layer}, \emph{learning rate}, \emph{epochs}, and \emph{batch size}. First, existing models were used to determine the number of LSTM layers to implement within the deep model. The reviewed DNNs were found to typically exploit between 1 \citep{bucci-2020} and 5 \citep{kim-2018} layers; therefore, to strike a balance between these implementations, the model proposed in this thesis relies on $3$ LSTM layers. Each of these hidden layers contains $24$ neurons, as existing implementations typically include 5--25 neurons per layer (Table \ref{table: architecture} enumerates the full architecture). Since the output layer is simply used to output the predicted volatility at a single timestep $t+1$ (by assembling all outputs of the final LSTM layer), this layer consists of a single neuron fully connected to its preceding hidden layer, from which the network's single output value (the forecast volatility $\hat{v}_{t+1}$) is read.
+    Devising a specific configuration of hyperparameters for the LSTM model was similarly done by surveying the literature base of LSTM-based volatility forecasting, and constructing a hyperparameter set that was representative of typical models in this field. The hyperparameters of the model that were determined in this manner are as follows: \emph{number of layers}, \emph{neurons per layer}, \emph{learning rate}, \emph{epochs}, and \emph{batch size}. First, existing models were used to determine the number of LSTM layers to implement within the deep model. The reviewed DNNs were found to typically exploit between 1 \citep{bucci-2020} and 5 \citep{kim-2018} layers; therefore, to strike a balance between these implementations, the model proposed in this thesis relies on $3$ LSTM layers. Existing implementations typically used 5--25 neurons per layer within each LSTM to evaluate its operations; hence, to demonstrate the computational cost of exploiting cutting-edge DNN-based volatility models the implemented architecture used $24$ neurons per layer (Table \ref{table: architecture}). Since the output layer is simply used to output the predicted volatility at a single timestep $t+1$ (by assembling all outputs of the final LSTM layer), this layer consists of a single neuron fully connected to its preceding hidden layer, from which the network's single output value (the forecast volatility $\hat{v}_{t+1}$) is read.
 
 
     \begin{table}[ht]
@@ -839,6 +840,7 @@
     \subsection{Model Approach}
 
     \subsubsection{Mixed-Precision Training}
+    \label{section: mixed-precision-method}
 
     The first method presented by this research for reducing the energy consumption (and hence carbon emissions) of DL is mixed-precision training. As explored in Section \ref{section: quantisation}, a popular focus chosen by developers investigating Green AI and low-resource systems is the use of quantisation. These implementations---such as the quantised LSTM of \citet{he-2016} and quantisation-aware training process of \citet{fan-2020b}---reduce energy and memory costs by lowering the precision at which variables are stored and operations are evaluated. Mixed-precision training---where a combination of quantised and high-precision representations are used to balance efficiency and accuracy---is a core aspect of how quantisation is realised in real-world applications (e.g. the mixed-precision RNN of \citet{ott-2017}). To demonstrate the benefits of quantisation, this research explores the use of mixed-precision training in the context of LSTM-based volatility forecasting. A mixed-precision training process is implemented that aims to reduce the computational and memory cost of training the proposed DNN, reducing the energy consumption and ESG impacts of volatility forecasting and Fintech in general.
 
@@ -935,55 +937,101 @@
     \subsection{Baseline Model}
 
 
-    \begin{table}
-        \centering
-        \label{table: efficiency}
-        \caption{Efficiency results for all methods}
-        \begin{tabular}{|l|l|l|l|l|} 
-        \hline
-        \textbf{Method}                                                               & \begin{tabular}[c]{@{}l@{}}\textbf{Total Training}\\\textbf{Time (s)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Pre-Training}\\\textbf{Time (s)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Tuning }\\\textbf{Time (s)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Memory }\\\textbf{Usage (MB)}\end{tabular}  \\ 
-        \hline
-        Baseline                                                                      &                                                                                    & -                                                                                & -                                                                           &                                                                                \\ 
-        \hline
-        Mixed-precision                                                               &                                                                                    & -                                                                                & -                                                                           &                                                                                \\ 
-        \hline
-        \begin{tabular}[c]{@{}l@{}}Supervised \\layer-wise pre-training\end{tabular}  &                                                                                    &                                                                                  &                                                                             &                                                                                \\ 
-        \hline
-        \begin{tabular}[c]{@{}l@{}}Unsupervised\\layer-wise~pre-training\end{tabular} &                                                                                    &                                                                                  &                                                                             &                                                                                \\ 
-        \hline
-        Active learning                                                               &                                                                                    & -                                                                                & -                                                                           &                                                                                \\
-        \hline
-        \end{tabular}
-    \end{table}
-
-
+    % accuracy metrics
     \begin{table}
         \centering
         \label{table: accuracy}
-        \caption{Accuracy data for all methods (over test datset)}
         \begin{tabular}{|l|l|l|l|l|} 
+            \hline
+            \textbf{Method}                                                               & $\mathbf{R^2}$ & \textbf{MAE} & \textbf{RMSE} & \textbf{MAPE (\%)}  \\ 
+            \hline
+            Baseline                                                                      & 0.979005        & 0.009249      & 0.013334       & 12.392648            \\ 
+            \hline
+            Mixed-precision                                                               & 0.982433        & 0.007852      & 0.012197       & 11.091287             \\ 
+            \hline
+            \begin{tabular}[c]{@{}l@{}}Supervised\\layer-wise pre-training\end{tabular}   & 0.990164        & 0.006247      & 0.009127       & 8.522277             \\ 
+            \hline
+            \begin{tabular}[c]{@{}l@{}}Unsupervised\\layer-wise pre-training\end{tabular} & 0.98098        & 0.00830      & 0.01269       & 9.90137            \\ 
+            \hline
+            Active Learning                                                               & 0.97041        & 0.00859      & 0.01583       & 10.44452            \\
+            \hline
+        \end{tabular}
+        \caption{Accuracy data for all methods, evaluated over the testing datset.}
+    \end{table}
+
+
+    % efficiency metrics
+    \begin{table}
+        \centering
+        \label{table: efficiency}
+        \begin{tabular}{|l|l|l|} 
         \hline
-        \textbf{Method}                                                               & $\mathbf{R^2}$ & \textbf{MAE} & \textbf{RMSE} & \textbf{MAPE (\%)}  \\ 
+        \textbf{Method}                                                               & \begin{tabular}[c]{@{}l@{}}\textbf{Total Training}\\\textbf{Time (s)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Training Dataset}\\\textbf{Size (count)}\end{tabular}  \\ 
         \hline
-        Baseline                                                                      & 0.982 & 0.00785      & 0.0122        & 10.9                \\ 
+        Baseline                                                                      & 207.863                                                                            & 14600                                                                                     \\ 
         \hline
-        Mixed-precision                                                               & 0.982 & 0.00734      & 0.0123        & 10.8                \\ 
+        Mixed-precision                                                               & 219.779                                                                            & 14600                                                                                     \\ 
         \hline
-        \begin{tabular}[c]{@{}l@{}}Supervised\\layer-wise pre-training\end{tabular}   & 0.983 & 0.00627      & 0.0120        & 9.47                \\ 
+        \begin{tabular}[c]{@{}l@{}}Supervised \\layer-wise pre-training\end{tabular}  & 190.5344                                                                           & 14600                                                                                     \\ 
         \hline
-        \begin{tabular}[c]{@{}l@{}}Unsupervised\\layer-wise pre-training\end{tabular} & 0.975 & 0.00940      & 0.0146        & 14.2                \\ 
+        \begin{tabular}[c]{@{}l@{}}Unsupervised\\layer-wise~pre-training\end{tabular} & 152.8665                                                                           & 14600                                                                                     \\ 
         \hline
-        Active Learning                                                               &       &              &               &                     \\
+        Active learning                                                               & 343.369                                                                            & 10100                                                                                     \\
         \hline
         \end{tabular}
+        \caption{\centering Efficiency results for all methods.}
     \end{table}
+
+    % progressive learning efficiency
+    \begin{table}
+        \centering
+        \label{table: progressive-efficiency}
+        \begin{tabular}{|l|l|l|l|l|l|l|} 
+        \hline
+        \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Pre-Training}\\\textbf{\footnotesize Method}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Pre-Training}\\\textbf{\footnotesize Time~(s)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Layer 1}\\\textbf{\footnotesize (\%)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Layer 2}\\\textbf{\footnotesize (\%)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Layer 3}\\\textbf{\footnotesize (\%)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Tuning}\\\textbf{\footnotesize Time (s)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Total Training}\\\textbf{\footnotesize Time~(s)}\end{tabular}  \\ 
+        \hline
+        None (baseline)              & -                                                                                                  & -                                                                                      & -                                                                                                       & -                                                                                                       & -                                                                          & 207.863                                                                       \\ 
+        \hline
+        Supervised                   & 126.684                                                                                            & 34.6                                                                                   & 32.7                                                                                                    & 32.7                                                                                                    & 63.8504                                                                    & 190.5344                                                                      \\ 
+        \hline
+        Unsupervised                 & 52.2105                                                                                             & 44.6                                                                                   & 26.3                                                                                                    & 29.1                                                                                                    & 100.656                                                                    & 152.8665                                                                      \\
+        \hline
+        \end{tabular}
+        \caption{\centering The time taken by pre-training and full network tuning for both supervised and unsupervised layer-wise pre-training (including a breakdown of the time spent pre-training each of the 3 internal LSTM layers), compared to the total time taken by the baseline method.}
+    \end{table}
+
+
+
+
+
 
 
     \begin{figure}[ht]
         \label{fig: predictions}
         \centering
         \includegraphics[width=0.8\textwidth]{traintest-split.png}
-        \caption{\centering Predicted volatility time series of each tested model (orange dashed line) against the true volatility time series (blue)}
+        \caption{\centering Predicted volatility time series of each tested model (orange dashed line) against the true volatility time series (blue).}
+    \end{figure}
+
+    \begin{figure}[ht]
+        \label{fig: training-rmse}
+        \centering
+        \includegraphics[width=0.8\textwidth]{traintest-split.png}
+        \caption{\centering Progression of each model's accuracy over the training process, evaluating its RMSE over the training dataset (blue line) and a validation set of instances held back from training (orange) after each epoch.}
+    \end{figure}
+
+    \begin{figure}[ht]
+        \label{fig: sup-progressive-accuracy}
+        \centering
+        \includegraphics[width=0.8\textwidth]{traintest-split.png}
+        \caption{\centering Progression of the accuracy (MAE and RMSE) of the model using supervised layer-wise pre-training over both pre-training and full network tuning (evaluated at each epoch over the distinct training and validation data).}
+    \end{figure}
+
+    \begin{figure}[ht]
+        \label{fig: unsup-progressive-accuracy}
+        \centering
+        \includegraphics[width=0.8\textwidth]{traintest-split.png}
+        \caption{\centering Progression of the accuracy (MAE and RMSE) of the model using unsupervised layer-wise pre-training over both pre-training and full network tuning (evaluated at each epoch over the distinct training and validation data).}
     \end{figure}
 
     
