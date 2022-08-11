@@ -939,44 +939,45 @@
 
     % accuracy metrics
     \begin{table}
-        \centering
         \label{table: accuracy}
+        \centering
         \begin{tabular}{|l|l|l|l|l|} 
-            \hline
-            \textbf{Method}                                                               & $\mathbf{R^2}$ & \textbf{MAE} & \textbf{RMSE} & \textbf{MAPE (\%)}  \\ 
-            \hline
-            Baseline                                                                      & 0.979005        & 0.009249      & 0.013334       & 12.392648            \\ 
-            \hline
-            Mixed-precision                                                               & 0.982433        & 0.007852      & 0.012197       & 11.091287             \\ 
-            \hline
-            \begin{tabular}[c]{@{}l@{}}Supervised\\layer-wise pre-training\end{tabular}   & 0.990164        & 0.006247      & 0.009127       & 8.522277             \\ 
-            \hline
-            \begin{tabular}[c]{@{}l@{}}Unsupervised\\layer-wise pre-training\end{tabular} & 0.98098        & 0.00830      & 0.01269       & 9.90137            \\ 
-            \hline
-            Active Learning                                                               & 0.97041        & 0.00859      & 0.01583       & 10.44452            \\
-            \hline
+        \hline
+        \textbf{Method}                                                               & $\mathbf{R^2}$ & \textbf{MAE} & \textbf{RMSE} & \textbf{MAPE (\%)}  \\ 
+        \hline
+        Baseline                                                                      & 0.977414       & 0.008407     & 0.013830      & 14.662217           \\ 
+        \hline
+        Mixed-precision                                                               & 0.977372       & 0.009121     & 0.013843      & 12.126700           \\ 
+        \hline
+        \begin{tabular}[c]{@{}l@{}}Supervised\\layer-wise pre-training\end{tabular}   & 0.985642       & 0.007814     & 0.011027      & 9.932409            \\ 
+        \hline
+        \begin{tabular}[c]{@{}l@{}}Unsupervised\\layer-wise pre-training\end{tabular} & 0.97110       & 0.00863     & 0.01564      & 11.12283           \\ 
+        \hline
+        Active Learning                                                               & 0.971119       & 0.010452     & 0.015639      & 16.337542           \\
+        \hline
         \end{tabular}
-        \caption{Accuracy data for all methods, evaluated over the testing datset.}
+        \caption{\centering Accuracy data for all methods, evaluated over the testing datset.}
     \end{table}
 
 
     % efficiency metrics
     \begin{table}
-        \centering
         \label{table: efficiency}
-        \begin{tabular}{|l|l|l|} 
+        \centering
+        \caption{Efficiency data for all methods}
+        \begin{tabular}{|l|l|l|l|} 
         \hline
-        \textbf{Method}                                                               & \begin{tabular}[c]{@{}l@{}}\textbf{Total Training}\\\textbf{Time (s)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Training Dataset}\\\textbf{Size (count)}\end{tabular}  \\ 
+        \textbf{Method}                                                               & \begin{tabular}[c]{@{}l@{}}\textbf{Total Training }\\\textbf{Time (s)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Training Dataset }\\\textbf{Size (count)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\textbf{Percentage Utilisation of }}\\\textbf{\textbf{Full Training Dataset (\%)}}\end{tabular}  \\ 
         \hline
-        Baseline                                                                      & 207.863                                                                            & 14600                                                                                     \\ 
+        Baseline                                                                      & 198.602                                                                             & 14600                                                                                     & 100                                                                                                                                 \\ 
         \hline
-        Mixed-precision                                                               & 219.779                                                                            & 14600                                                                                     \\ 
+        Mixed-precision                                                               & 236.306                                                                             & 14600                                                                                     & 100                                                                                                                                 \\ 
         \hline
-        \begin{tabular}[c]{@{}l@{}}Supervised \\layer-wise pre-training\end{tabular}  & 190.5344                                                                           & 14600                                                                                     \\ 
+        \begin{tabular}[c]{@{}l@{}}Supervised \\layer-wise pre-training\end{tabular}  & \textcolor[rgb]{0.125,0.129,0.141}{154.9519}                                        & 14600                                                                                     & 100                                                                                                                                 \\ 
         \hline
-        \begin{tabular}[c]{@{}l@{}}Unsupervised\\layer-wise~pre-training\end{tabular} & 152.8665                                                                           & 14600                                                                                     \\ 
+        \begin{tabular}[c]{@{}l@{}}Unsupervised\\layer-wise~pre-training\end{tabular} & \textcolor[rgb]{0.125,0.129,0.141}{117.389}                                         & 14600                                                                                     & 100                                                                                                                                 \\ 
         \hline
-        Active learning                                                               & 343.369                                                                            & 10100                                                                                     \\
+        Active learning                                                               & 292.042                                                                             & 9100                                                                                      & 62.33                                                                                                                               \\
         \hline
         \end{tabular}
         \caption{\centering Efficiency results for all methods.}
@@ -984,17 +985,18 @@
 
     % progressive learning efficiency
     \begin{table}
-        \centering
         \label{table: progressive-efficiency}
+        \centering
+        \caption{Table enumerating the final 5 values of the vola}
         \begin{tabular}{|l|l|l|l|l|l|l|} 
         \hline
         \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Pre-Training}\\\textbf{\footnotesize Method}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Pre-Training}\\\textbf{\footnotesize Time~(s)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Layer 1}\\\textbf{\footnotesize (\%)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Layer 2}\\\textbf{\footnotesize (\%)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Layer 3}\\\textbf{\footnotesize (\%)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Tuning}\\\textbf{\footnotesize Time (s)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Total Training}\\\textbf{\footnotesize Time~(s)}\end{tabular}  \\ 
         \hline
-        None (baseline)              & -                                                                                                  & -                                                                                      & -                                                                                                       & -                                                                                                       & -                                                                          & 207.863                                                                       \\ 
+        None (baseline)                                                                & -                                                                                & -                                                                       & -                                                                       & -                                                                       & -                                                                          & 198.602                                                                             \\ 
         \hline
-        Supervised                   & 126.684                                                                                            & 34.6                                                                                   & 32.7                                                                                                    & 32.7                                                                                                    & 63.8504                                                                    & 190.5344                                                                      \\ 
+        Supervised                                                                     & 107.886                                                                          & 32.6                                                                    & 29.0                                                                    & 38.4                                                                    & 47.0659                                                                    & \textcolor[rgb]{0.125,0.129,0.141}{154.9519}                                        \\ 
         \hline
-        Unsupervised                 & 52.2105                                                                                             & 44.6                                                                                   & 26.3                                                                                                    & 29.1                                                                                                    & 100.656                                                                    & 152.8665                                                                      \\
+        Unsupervised                                                                   & 51.8425                                                                          & 31.8                                                                    & 40.4~                                                                   & 27.8                                                                    & 65.5465                                                                    & \textcolor[rgb]{0.125,0.129,0.141}{117.389}                                         \\
         \hline
         \end{tabular}
         \caption{\centering The time taken by pre-training and full network tuning for both supervised and unsupervised layer-wise pre-training (including a breakdown of the time spent pre-training each of the 3 internal LSTM layers), compared to the total time taken by the baseline method.}
@@ -1009,8 +1011,8 @@
     \begin{figure}[ht]
         \label{fig: predictions}
         \centering
-        \includegraphics[width=0.8\textwidth]{traintest-split.png}
-        \caption{\centering Predicted volatility time series of each tested model (orange dashed line) against the true volatility time series (blue).}
+        \includegraphics[width=0.6\textwidth]{results/all-predictions.png}
+        \caption{\centering Predicted volatility time series of each tested model (orange dashed line) against the true volatility time series (blue) over testing dataset.}
     \end{figure}
 
     \begin{figure}[ht]
