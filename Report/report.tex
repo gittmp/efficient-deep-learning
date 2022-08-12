@@ -1,6 +1,6 @@
 % ------------------ DOCUMENT SETUP / PACKAGES ------------------ 
 \documentclass[a4paper, 11pt]{report}
-\usepackage[a4 paper, top=25mm, bottom=25mm, left=25mm, right=25mm]{geometry}
+\usepackage[a4 paper, top=25mm, bottom=25mm, left=25mm, right=20mm]{geometry}
 % \usepackage{times}
 \usepackage{setspace}
 \onehalfspacing
@@ -9,11 +9,11 @@
 \usepackage{color}
 \usepackage{emptypage}
 \usepackage{array}
+\usepackage{multirow}
 \usepackage{graphicx}
 \graphicspath{{./resources/}} 
 
 \usepackage[table, xcdraw]{xcolor}
-% \setlength{\tabcolsep}{7pt}
 \renewcommand{\arraystretch}{1.3}
 
 \usepackage{amsmath}
@@ -783,6 +783,7 @@
 
 
     \subsubsection{Accuracy Metrics}
+    \label{section: accuracy-metrics}
 
     After the DNN has been trained over the dataset $D_{train}$, predictions are made using the data instances in $D_{test}$; these predictions are analysed through a collection of statistical metrics that objectively quantify the modelling error $\varepsilon$ and prediction accuracy. Namely, accuracy metrics are used to explicitly measure the divergence between the predicted volatility time series value $\hat{y}_t = \hat{v}_{t+1}$ and the true label $y_t = v_{t+1}$ enumerating the actual recorded HV at that future timestep. These metrics are important as they not only demonstrate the success of the baseline model, but will later be used to contextualise the effect of the implemented energy and data-efficient adaptations, highlighting their impact on performance. 
 
@@ -819,6 +820,7 @@
 
 
     \subsubsection{Efficiency Metrics}
+    \label{section: efficiency-metrics}
 
     Beyond generating accurate performance, the efficiency of the implementations is of vital importance to this research. An informative efficiency metric is required to demonstrate the issue with traditional DNN approaches, quantifying the computational cost of the baseline model to give an insight into the environmental impact of such systems. Furthermore, efficiency metrics are imperative to demonstrating the improvements facilitated by Green AI by quantifying how the proposed training adaptations have reduced the resources necessary to train a DNN. 
 
@@ -882,6 +884,7 @@
 
 
     \subsection{Model Approach}
+    \label{section: al-model}
 
     Possibly the most promising approach to improving the data efficiency of DNNs is active learning \citep{ren-2021}. As described in Section \ref{section: active-learning}, active learning has been shown to drastically improve the data efficiency of training DNNs by reducing the time and energy wasted on redundant data instances \citep{xu-2021}, as well as achieving an exponential improvement in the time required to label training data, and successfully dealing with high-dimensional sequential data \citep{ren-2021}. Hence, in an attempt to improve the data efficiency of DL training in the context of LSTM-based financial volatility forecasting, this experimentation explores the use of active learning.
 
@@ -930,15 +933,30 @@
     \chapter{Results \& Discussion}
     \label{chapter: results-discussion}
 
-    The results of the experimentation presented in Chapter \ref{chapter: experiments} are explored in the following section. Initially, the data collected from analyses of the implemented methods is presented, summarising what is shown by the research findings, highlighting their significance, and examining their implications for the research hypotheses. Following this, a detailed discussion surrounding the success of each experiment is undertaken, evaluating the accuracy and efficiency of each presented method to deduce how effective these Green AI approaches are at reducing the computational cost of DNN training within the chosen application of LSTM-based financial market volatility forecasting. The results and discussion are broken down into the three constituent experiments of this research; initially, the baseline model is tested and its computational cost quantified, giving a baseline against which the efficiency-focussed adaptations can be compared. Secondly, the results indicating the success of the energy-efficient extensions in reducing the training time and memory usage of the implemented DNN are explored. Finally, the reduction in data requirements facilitated by the implemented data-efficient extensions is quantified, exploring their benefit to reducing the computational cost of training DNNs. The results of this research aim to demonstrate the success of Green AI in reducing the computational cost of DL, in the context of financial volatility forecasting and Fintech in general; this is in an attempt to showcase a possible avenue for improving the sustainability of DL for finance, minimising the ESG impacts of Fintech and the financial sector as a whole.
+    The results of the experimentation presented in Chapter \ref{chapter: experiments} are explored in the following section. Initially, the data collected from analyses of the implemented methods is presented, summarising what is shown by the research findings, highlighting their significance, and examining their implications for the research hypotheses. Following this, a detailed discussion surrounding the success of each experiment is undertaken, evaluating the accuracy and efficiency of each presented method to deduce how effective Green AI approaches are at reducing the computational cost of DNN training within the chosen application of LSTM-based financial market volatility forecasting. The results of each experiment are presented and discussed with close reference to the accuracy and efficiency measures introduced in Section \ref{section: metrics}, quantifying both the improvement to energy (and data) efficiency facilitated through Green AI and the effect on performance. Initially, the performance of the models using each explored training process will be presented to demonstrate the benefits of each to maintaining and improving the accuracy of a model. Following this, model efficiency will be explored; this will indicate the overall success of this research in its application of Green AI to Fintech. Namely, the energy efficiency of the adapted training processes will be quantified and hence the success of these methods in reducing the computational cost of DNN training discussed, evaluating the utility of this approach to mitigating the ESG impacts of DL for finance. Moreover, the data-efficient training approach will be used to outline how the utilisation of vast, expensive datasets can be reduced, further reducing the computational cost of DL training and the data centres DNNs often rely upon.
 
-    \section{Results}
+    \section{General Predictive Performance}
 
-    \subsection{Baseline Model}
+    To demonstrate the success of both the baseline model and the models trained in an energy and data-efficient manner, an initial analysis tested their ability to forecast volatility over the testing dataset of time series instances not used during training. Figure \ref{fig: predictions} shows the forecasts generated by all models; each plot shows the volatility $\hat{v}_{t+1}$ predicted by the associated model over all timesteps of the testing period, contextualised against the time series of true volatility values $v_{t+1}$. At a given timestep $t$, each model took input of the preceding $10$ timesteps of the multivariate time series (i.e. the time-windowed data instance that ends at $t$) to output its one-step-ahead prediction $\hat{v}_{t+1}$; all forecast values $\hat{v}_{t+1}$ were then collected to construct the forecast time series for each model depicted in Figure \ref{fig: predictions}.
 
+    \begin{figure}[ht]
+        \label{fig: predictions}
+        \centering
+        \includegraphics[width=0.6\textwidth]{results/all-predictions.png}
+        \caption{\centering Predicted volatility time series of each tested model (orange dashed line) against the true volatility time series (blue) over testing dataset.}
+    \end{figure}
+
+    From inspection of each plot in Figure \ref{fig: predictions}, it can be seen that all models can generate predictions that accurately follow the trend of the true volatility sequence. Namely, over the entirety of the test set, one can see that each DNN's forecast time series follows the general trend of peaks and troughs exhibited within the volatility time series. However, close inspection of how the different models handle these rapid volatility jumps highlights the differences in forecasting characteristics generated by each alternative training process. If one inspects the significant rise in volatility in late 2008 (corresponding to the 2008 financial crisis), the baseline model is shown to underpredict the true volatility, undercutting the true peak volatility by a fairly significant margin (outputting a $\hat{v}_{t+1} \approx 0.6$ when the true value of $v_{t+1}$ is closer to $0.7$). A similar characteristic can be seen in early 2020 (corresponding to the COVID19 pandemic) and soon thereafter, where the significant fluctuations in volatility are consistently underestimated by the DNN's predictions. This suggests that whilst the baseline DNN appears to model the smaller volatility changes very accurately, large, rapid changes in the true volatility result in less accurate predictions. 
+
+    When the predicted time series of the adapted models are inspected and compared to that of the baseline model, the differences in forecasting ability can be observed. Figure \ref{fig: predictions} shows that the models using supervised and unsupervised layer-wise pre-training most accurately represent both small and large fluctuations in volatility. The plots corresponding to the models exploiting layer-wise pre-training show that the predicted volatility values $\hat{v}_{t+1}$ are significantly closer to the true labels $v_{t+1}$ at times of high volatility (for example, the discussed 2008 and 2020 periods). The forecast values of the model trained through unsupervised layer-wise pre-training appear slightly less accurate than those of its supervised counterpart, as its predictions seem to overestimate the volatility jumps in 2008 and 2020, however less extreme movements seem to be modelled very closely. The model developed through mixed-precision training also appears to generate predictions that lie closer to the true volatility than the baseline model, although with an accuracy slightly below that of the layer-wise pre-trained models. These results suggest that supervised layer-wise pre-training generates a model with the highest accuracy, closely followed by unsupervised layer-wise pre-training, both of which outperform the baseline model. 
+
+    When considering the model constructed through active learning, the forecast time series is also shown to accurately follow the path of the true volatility, with most fluctuations accurately captured. However, these predictions seem to slightly miss the true movements, as the scale of peaks and troughs seems to be consistently underestimated (underpredicting the value of $\hat{v}_{t+1}$ for peaks and overestimating it at troughs), suggesting this model is slightly less performant than other adapted approaches. However, the general trend of the predictions on a wider scale seems (at least) commensurate with those of the baseline model, indicating that the implemented active learning training process does not degrade the forecasting performance possible from a DNN.
+
+
+    \section{Accuracy Studies}
 
     % accuracy metrics
-    \begin{table}
+    \begin{table}[ht]
         \label{table: accuracy}
         \centering
         \begin{tabular}{|l|l|l|l|l|} 
@@ -951,7 +969,7 @@
         \hline
         \begin{tabular}[c]{@{}l@{}}Supervised\\layer-wise pre-training\end{tabular}   & 0.985642       & 0.007814     & 0.011027      & 9.932409            \\ 
         \hline
-        \begin{tabular}[c]{@{}l@{}}Unsupervised\\layer-wise pre-training\end{tabular} & 0.97110       & 0.00863     & 0.01564      & 11.12283           \\ 
+        \begin{tabular}[c]{@{}l@{}}Unsupervised\\layer-wise pre-training\end{tabular} & 0.98406       & 0.00708     & 0.01162      & 8.80475           \\ 
         \hline
         Active Learning                                                               & 0.971119       & 0.010452     & 0.015639      & 16.337542           \\
         \hline
@@ -960,43 +978,48 @@
     \end{table}
 
 
+
+
+
+
+    \section{Evaluating Energy Efficiency}
+
     % efficiency metrics
     \begin{table}
-        \label{table: efficiency}
         \centering
-        \caption{Efficiency data for all methods}
-        \begin{tabular}{|l|l|l|l|} 
+        \label{table: efficiency}
+        \begin{tabular}{|l|l|} 
         \hline
-        \textbf{Method}                                                               & \begin{tabular}[c]{@{}l@{}}\textbf{Total Training }\\\textbf{Time (s)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{Training Dataset }\\\textbf{Size (count)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\textbf{Percentage Utilisation of }}\\\textbf{\textbf{Full Training Dataset (\%)}}\end{tabular}  \\ 
+        \textbf{Method}                                                               & \begin{tabular}[c]{@{}l@{}}\textbf{Total Training }\\\textbf{Time (s)}\end{tabular}  \\ 
         \hline
-        Baseline                                                                      & 198.602                                                                             & 14600                                                                                     & 100                                                                                                                                 \\ 
+        Baseline                                                                      & 198.602                                                                              \\ 
         \hline
-        Mixed-precision                                                               & 236.306                                                                             & 14600                                                                                     & 100                                                                                                                                 \\ 
+        Mixed-precision                                                               & 236.306                                                                              \\ 
         \hline
-        \begin{tabular}[c]{@{}l@{}}Supervised \\layer-wise pre-training\end{tabular}  & \textcolor[rgb]{0.125,0.129,0.141}{154.9519}                                        & 14600                                                                                     & 100                                                                                                                                 \\ 
+        \begin{tabular}[c]{@{}l@{}}Supervised \\layer-wise pre-training\end{tabular}  & 154.952                                                                             \\ 
         \hline
-        \begin{tabular}[c]{@{}l@{}}Unsupervised\\layer-wise~pre-training\end{tabular} & \textcolor[rgb]{0.125,0.129,0.141}{117.389}                                         & 14600                                                                                     & 100                                                                                                                                 \\ 
+        \begin{tabular}[c]{@{}l@{}}Unsupervised\\layer-wise~pre-training\end{tabular} & 130.292                                                                             \\ 
         \hline
-        Active learning                                                               & 292.042                                                                             & 9100                                                                                      & 62.33                                                                                                                               \\
+        Active learning                                                               & 292.042                                                                              \\
         \hline
         \end{tabular}
-        \caption{\centering Efficiency results for all methods.}
+        \caption{\centering Total training time required for each implemented training process to produce a model with the accuracy outlined in the preceding accuracy table.}
     \end{table}
+    
 
     % progressive learning efficiency
     \begin{table}
-        \label{table: progressive-efficiency}
         \centering
-        \caption{Table enumerating the final 5 values of the vola}
-        \begin{tabular}{|l|l|l|l|l|l|l|} 
+        \label{table: progressive-efficiency}
+        \begin{tabular}{|l|l|l|l|l|l|l|l|l|} 
         \hline
-        \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Pre-Training}\\\textbf{\footnotesize Method}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Pre-Training}\\\textbf{\footnotesize Time~(s)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Layer 1}\\\textbf{\footnotesize (\%)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Layer 2}\\\textbf{\footnotesize (\%)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Layer 3}\\\textbf{\footnotesize (\%)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Tuning}\\\textbf{\footnotesize Time (s)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Total Training}\\\textbf{\footnotesize Time~(s)}\end{tabular}  \\ 
+        \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Pre-Training}\\\textbf{\footnotesize Method}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Pre-}\\\textbf{\footnotesize Training}\\\textbf{\footnotesize Time~(s)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\textbf{\footnotesize Pre-}}\\\textbf{\footnotesize Training}\\\textbf{\footnotesize Epochs}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Layer}\\\textbf{\footnotesize 1~(\%)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Layer}\\\textbf{\footnotesize 2~(\%)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Layer}\\\textbf{\footnotesize 3~(\%)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Tuning}\\\textbf{\footnotesize Time}\\\textbf{\footnotesize (s)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Tuning}\\\textbf{\footnotesize Epochs}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Total}\\\textbf{\footnotesize Time}\\\textbf{\footnotesize (s)}\end{tabular}  \\ 
         \hline
-        None (baseline)                                                                & -                                                                                & -                                                                       & -                                                                       & -                                                                       & -                                                                          & 198.602                                                                             \\ 
+        None                                                                             & -                                                                                             & -                                                                                                                    & -                                                                         & -                                                                        & -                                                                        & 198.60                                                                                  & 100                                                                      & 198.60                                                                                  \\ 
         \hline
-        Supervised                                                                     & 107.886                                                                          & 32.6                                                                    & 29.0                                                                    & 38.4                                                                    & 47.0659                                                                    & \textcolor[rgb]{0.125,0.129,0.141}{154.9519}                                        \\ 
+        Supervised                                                                       & 107.89                                                                                        & 20                                                                                                                   & 32.6                                                                      & 29.0                                                                     & 38.4                                                                     & 47.066                                                                                  & 20                                                                       & 154.95                                                                                  \\ 
         \hline
-        Unsupervised                                                                   & 51.8425                                                                          & 31.8                                                                    & 40.4~                                                                   & 27.8                                                                    & 65.5465                                                                    & \textcolor[rgb]{0.125,0.129,0.141}{117.389}                                         \\
+        Unsupervised                                                                     & 43.769                                                                                        & 7                                                                                                                    & 27.4                                                                      & 47.8~                                                                    & 24.7                                                                     & 86.523                                                                                  & 50                                                                       & 130.29                                                                                  \\
         \hline
         \end{tabular}
         \caption{\centering The time taken by pre-training and full network tuning for both supervised and unsupervised layer-wise pre-training (including a breakdown of the time spent pre-training each of the 3 internal LSTM layers), compared to the total time taken by the baseline method.}
@@ -1007,32 +1030,26 @@
 
 
 
-
-    \begin{figure}[ht]
-        \label{fig: predictions}
-        \centering
-        \includegraphics[width=0.6\textwidth]{results/all-predictions.png}
-        \caption{\centering Predicted volatility time series of each tested model (orange dashed line) against the true volatility time series (blue) over testing dataset.}
-    \end{figure}
+    
 
     \begin{figure}[ht]
         \label{fig: training-rmse}
         \centering
-        \includegraphics[width=0.8\textwidth]{traintest-split.png}
+        \includegraphics[width=0.8\textwidth]{results/all-training-rmse.png}
         \caption{\centering Progression of each model's accuracy over the training process, evaluating its RMSE over the training dataset (blue line) and a validation set of instances held back from training (orange) after each epoch.}
     \end{figure}
 
     \begin{figure}[ht]
         \label{fig: sup-progressive-accuracy}
         \centering
-        \includegraphics[width=0.8\textwidth]{traintest-split.png}
+        \includegraphics[width=0.8\textwidth]{results/loss-suplayerwise.png}
         \caption{\centering Progression of the accuracy (MAE and RMSE) of the model using supervised layer-wise pre-training over both pre-training and full network tuning (evaluated at each epoch over the distinct training and validation data).}
     \end{figure}
 
     \begin{figure}[ht]
         \label{fig: unsup-progressive-accuracy}
         \centering
-        \includegraphics[width=0.8\textwidth]{traintest-split.png}
+        \includegraphics[width=0.8\textwidth]{results/loss-unsuplayerwise.png}
         \caption{\centering Progression of the accuracy (MAE and RMSE) of the model using unsupervised layer-wise pre-training over both pre-training and full network tuning (evaluated at each epoch over the distinct training and validation data).}
     \end{figure}
 

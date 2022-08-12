@@ -1,5 +1,7 @@
 /Report*
 !/Report/resources/*
+!/Report/resources/results/*
+Report/resources/results/.DS_Store
 !/Report/report.pdf
 !/Report/report.tex
 
