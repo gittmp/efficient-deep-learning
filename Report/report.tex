@@ -281,6 +281,7 @@
 
 
     \subsection{Deep Learning}
+    \label{section: deep-learning}
 
     Whilst Rosenblatt's model produced underwhelming results due to its simplicity, its design became a fundamental building block of the larger, more complex ANNs used today. Namely, modern networks build on this approach by having wider and deeper \emph{model architectures} consisting of more internal neurons arranged in multiple layers. This approach of using \emph{multi-layer perceptrons} was popularised by \citet{rumelhart-1986}; however, recent work has pushed the boundaries of neural network performance by designing deeper and deeper architectures---known as \emph{deep neural networks} (DNNs)---to establish the field of deep learning. These deep networks perform computations in a similar vein to Rosenblatt's perceptron. Information is passed between the input layer $l^{(0)}$ and output layer $l^{(L-1)}$ along weighted channels between neurons, with the \emph{activation value} $a^{(i)}_n$ assigned each neuron $n$ in layer $i$ being determined through the dot product between the weights $W^{(i-1, i)}$ of channels entering $n$ and the values $x^{(i-1)}$ of neurons in the preceding layer $i-1$ connected through those channels \citep{witten-2017}. This product is then summed with a \emph{bias} term $b^{(i)}$, and passed through a chosen activation function $\alpha$ (Equation \ref{eq: activation-value}).
 
@@ -828,7 +829,7 @@
 
     \citet{amodei-2018} also explore the efficiency of DNNs, asserting that the cost of training a given network is dependent on the hardware through which this process is implemented, and the training time $T_{days}$ (Equation \ref{eq: cost-t}). As the implemented experimentation all relies upon the same hardware, this efficiency metric is also redundant to our study. However, training time is an important aspect of the cost of DL training, and hence to quantify the energy efficiency of training the total time required to train a DNN with accurate performance is calculated. Training time is a simple but effective measure for highlighting the efficiency of a program, as more time typically means a higher computational cost. Although it is important to note that training time is not a completely representative metric, as it is reliant upon the underlying hardware and software dependencies of the system \citep{schwartz-2019}. However, since this efficiency metric is used for comparison of the relative differences in computational cost between the various training approaches implemented (all of which use the same underlying hardware and software), the calculation of training time is both valid and beneficial in this context.
 
-    In the same way that the time taken by a training process can be explicitly quantified, the memory usage of a given function or algorithm within a program can be directly measured. Hence, to evaluate the computational cost of the training process of a DNN, we can analyse the amount of memory used by this process to retrieve parameters, save variables, and maintain intermediate values. This gives a direct insight into the energy consumed by training---and hence the energy efficiency of the training process---as DNNs with large memory requirements (in particular RNNs) have been shown to come with a significant energetic cost \citep{feliz-2021}. Hence, the memory usage of the baseline training process is evaluated within this experimentation, such that a broader picture of its energy efficiency can be deduced and compared to later efficiency-focussed adaptations.
+    Beyond solely evaluating total training time, the efficiency of a training algorithm can additionally be determined by inspecting how fast and smooth the minimum of the loss function is converged upon. As outlined in Section \ref{section: deep-learning}, a DNN is trained by adjusting the network's parameter set in the direction of the negative gradient of the loss function, determined through backpropagation of the DNN's prediction error. Hence, the purpose of DNN training is to find the optimal parameter set that corresponds to the minimum of that loss function, meaning the DNN has an optimally low prediction error. The efficiency of a DL training process can therefore be determined by the speed and smoothness at which this minimum point is approached; this is known as the convergence rate of training, which calculates the size of the step taken towards the loss function's minimum after each epoch. Convergence rate is an important factor when considering the efficiency of a DL training algorithm, as the faster a DNN's parameters converge towards their optimal values, the more effective the early stages of training (as the DNN learns more over each epoch), and thus the less time, fewer calculations and data evaluations, and lower energy consumption is required to develop an accurate model.
 
 
     \section{Energy-Efficient Training Extensions}
@@ -937,14 +938,14 @@
 
     \section{General Predictive Performance}
 
-    To demonstrate the success of both the baseline model and the models trained in an energy and data-efficient manner, an initial analysis tested their ability to forecast volatility over the testing dataset of time series instances not used during training. Figure \ref{fig: predictions} shows the forecasts generated by all models; each plot shows the volatility $\hat{v}_{t+1}$ predicted by the associated model over all timesteps of the testing period, contextualised against the time series of true volatility values $v_{t+1}$. At a given timestep $t$, each model took input of the preceding $10$ timesteps of the multivariate time series (i.e. the time-windowed data instance that ends at $t$) to output its one-step-ahead prediction $\hat{v}_{t+1}$; all forecast values $\hat{v}_{t+1}$ were then collected to construct the forecast time series for each model depicted in Figure \ref{fig: predictions}.
-
     \begin{figure}[ht]
         \label{fig: predictions}
         \centering
-        \includegraphics[width=0.6\textwidth]{results/all-predictions.png}
+        \includegraphics[width=0.5\textwidth]{results/all-predictions.png}
         \caption{\centering Predicted volatility time series of each tested model (orange dashed line) against the true volatility time series (blue) over testing dataset.}
     \end{figure}
+
+    To demonstrate the success of both the baseline model and the models trained in an energy and data-efficient manner, an initial analysis tested their ability to forecast volatility over the testing dataset of time series instances not used during training. Figure \ref{fig: predictions} shows the forecasts generated by all models; each plot shows the volatility $\hat{v}_{t+1}$ predicted by the associated model over all timesteps of the testing period, contextualised against the time series of true volatility values $v_{t+1}$. At a given timestep $t$, each model took input of the preceding $10$ timesteps of the multivariate time series (i.e. the time-windowed data instance that ends at $t$) to output its one-step-ahead prediction $\hat{v}_{t+1}$; all forecast values $\hat{v}_{t+1}$ were then collected to construct the forecast time series for each model depicted in Figure \ref{fig: predictions}.
 
     From inspection of each plot in Figure \ref{fig: predictions}, it can be seen that all models can generate predictions that accurately follow the trend of the true volatility sequence. Namely, over the entirety of the test set, one can see that each DNN's forecast time series follows the general trend of peaks and troughs exhibited within the volatility time series. However, close inspection of how the different models handle these rapid volatility jumps highlights the differences in forecasting characteristics generated by each alternative training process. If one inspects the significant rise in volatility in late 2008 (corresponding to the 2008 financial crisis), the baseline model is shown to underpredict the true volatility, undercutting the true peak volatility by a fairly significant margin (outputting a $\hat{v}_{t+1} \approx 0.6$ when the true value of $v_{t+1}$ is closer to $0.7$). A similar characteristic can be seen in early 2020 (corresponding to the COVID19 pandemic) and soon thereafter, where the significant fluctuations in volatility are consistently underestimated by the DNN's predictions. This suggests that whilst the baseline DNN appears to model the smaller volatility changes very accurately, large, rapid changes in the true volatility result in less accurate predictions. 
 
@@ -953,7 +954,7 @@
     When considering the model constructed through active learning, the forecast time series is also shown to accurately follow the path of the true volatility, with most fluctuations accurately captured. However, these predictions seem to slightly miss the true movements, as the scale of peaks and troughs seems to be consistently underestimated (underpredicting the value of $\hat{v}_{t+1}$ for peaks and overestimating it at troughs), suggesting this model is slightly less performant than other adapted approaches. However, the general trend of the predictions on a wider scale seems (at least) commensurate with those of the baseline model, indicating that the implemented active learning training process does not degrade the forecasting performance possible from a DNN.
 
 
-    \section{Accuracy Studies}
+    \section{Accuracy Results}
 
     % accuracy metrics
     \begin{table}[ht]
@@ -971,21 +972,30 @@
         \hline
         \begin{tabular}[c]{@{}l@{}}Unsupervised\\layer-wise pre-training\end{tabular} & 0.98406       & 0.00708     & 0.01162      & 8.80475           \\ 
         \hline
-        Active Learning                                                               & 0.971119       & 0.010452     & 0.015639      & 16.337542           \\
+        Active Learning                                                               & 0.971119       & 0.010452     & 0.015639      & 11.08715           \\
         \hline
         \end{tabular}
         \caption{\centering Accuracy data for all methods, evaluated over the testing datset.}
     \end{table}
 
+    To demonstrate the success of the implemented training methods more precisely, further analysis evaluated the models through the accuracy metrics presented in Section \ref{section: accuracy-metrics}, the results of which are shown in Table \ref{table: accuracy}. The forecasting performance of each model was quantified over the test dataset held back from training. This began with the baseline model; it was found to exhibit an impressive test accuracy, demonstrating the great ability of the LSTM architecture to model sequences such as the utilised financial volatility time series. Namely, the coefficient of determination of the baseline model was found to be $0.977414$, showing that the sum of squared prediction errors between $\hat{v}_{t+1}$ and $v_{t+1}$ is close to zero (Equation \ref{eq: r-squared}). This means that the true labels have been near-perfectly represented by the model, demonstrating the DNN trained by a traditional training process can generate excellent one-step-ahead forecasts of the market volatility of the S\&P 500. Similarly, the baseline model produced impressive MAE and RMSE scores of $0.008407$ and $0.013830$, demonstrating that the average magnitude of the prediction error is near-zero. Importantly, both the MAE and RMSE are similar, indicating that the model is averse to uniform prediction errors (errors that are uniformly distributed around the true label) highlighted by the MAE and highly deviant predictions (errors that are anomalously far from the label) identified by the RMSE. The model also generated an impressive MAPE of $14.662217\%$, indicating that the DNN has fit the training data well and is producing accurate predictions.
+
+    After certifying the performance of the baseline model, the accuracy achieved by alternative training methods that prioritised energy and data efficiency could be contextualised. This exploration began with an analysis of mixed-precision training; impressively, the mixed-precision model was found to achieve slightly better performance than its high-precision counterpart. By exploiting lower precision representations, this model was able to achieve higher accuracy than the baseline across almost all metrics, generating a $15.10\%$ lower MAE, $10.50\%$ lower MAPE, $8.53\%$ decrease in RMSE (Table \ref{table: accuracy}). These scores indicate that the DNN exploiting mixed-precision training was able to forecast market volatility more accurately than the baseline across both scale-dependent and scale-independent metrics.
+
+    Following this result, the two models that utilised progressive training were analysed. The first model, which exploited a supervised layer-wise pre-training process, exhibited a further reduction in prediction error, achieving a higher forecasting accuracy than both the baseline and mixed-precision models that used traditional training algorithms. The optimised model produced an outstanding $R^2$ score of $0.985642$, indicating that using supervised layer-wise pre-training facilitated an almost perfect correspondence between $\hat{v}_{t+1}$ and $v_{t+1}$; additionally, this model reduced the MAPE of the baseline model by $32.26\%$ and the mixed-precision model by $18.09\%$. The improvement in accuracy was observed across the board, generating better $R^2$, MAE, RMSE, and MAPE scores than both the baseline and mixed-precision methods. The second progressively trained model tested used unsupervised layer-wise pre-training. This model also exhibited impressive performance, generating predictions of similar accuracy to its supervised counterpart. Namely, the unsupervised pre-trained model also significantly outperformed the baseline implementation, exhibiting a $0.6800\%$ higher $R^2$, $15.78\%$ lower MAE, $15.98\%$ lower RMSE, and an exceptional decrease in MAPE of $39.95\%$. When directly comparing the models using supervised and unsupervised layer-wise pre-training, however, the relative advancements are not so explicit. The test $R^2$ and RMSE scores generated by these models indicate that the supervised approach produced marginally better performance: the $R^2$ of the supervised approach was $0.1607\%$ higher and RMSE $5.103\%$ lower. Alternatively, the results of other accuracy testing metrics suggest the unsupervised approach generated a more performant model, with a $9.393\%$ smaller MAE and $11.35\%$ smaller MAPE. This suggests that both supervised and unsupervised layer-wise pre-training facilitated accuracy gains over the baseline training algorithm, but each focussed on reducing prediction error differently: for example, the lower RMSE of the supervised pre-trained DNN indicates this model less frequently generates predictions that are highly incompatible with the true value (i.e. where $\lvert \hat{v}_{t+1} - v_{t+1} \lvert$ is large). Thus, the accuracy results in Table \ref{table: accuracy} show that both supervised and unsupervised layer-wise pre-training are the most effective training methods for developing high-performance DNNs for volatility forecasting. 
+
+    Once these three energy-efficient approaches had been explored, the experimentation turned to focus on how active learning can be used to improve the data efficiency of DNN training in this domain. The chosen active learning implementation produced impressive performance when evaluating through MAPE, exhibiting a $24.38\%$ lower test MAPE than the baseline model. However, when considering other accuracy metrics, the model was not shown to exhibit such an accuracy benefit over the baseline, having a slightly worse coefficient of determination ($0.6440\%$ lower) and noticeably increased test MAE ($24.33\%$ higher) and RMSE ($13.08\%$ higher). Thus, the performance of the active learning-based model was roughly equivalent to the baseline, outperforming it on some metrics and exhibiting lower accuracy on others. Furthermore, when different parameterisations of the active learning training process were explored (Table \ref{table: al-efficiency}), a few implementations did produce higher accuracy than the baseline (achieved through sacrificing their data efficiency gains); for example, when using 200 training iterations and a sample size of 70, a $26.83\%$ lower RMSE and $34.72\%$ lower MAPE were facilitated (but using $96.36\%$ of the full training dataset). Hence, these results indicate that active learning can be used to develop a model with similar performance to a traditionally trained baseline, supporting the assertion that this method can be tuned to only inflict a marginal accuracy detriment.
 
 
+    \section{Efficiency Results}
+
+    As outlined in Section \ref{section: efficiency-metrics}, total training time is one of the most applicable metrics for quantifying the energy efficiency of DL training algorithms in this context (as all experiments use the same underlying hardware, software, and DNN architecture). Hence, to examine the success of the presented training adaptations, the time (in seconds) taken to optimise the parameters of each model over their different training processes was quantified by profiling each implementation. 
 
 
-
-    \section{Evaluating Energy Efficiency}
+    \subsection{Training Time Analysis}
 
     % efficiency metrics
-    \begin{table}
+    \begin{table}[ht]
         \centering
         \label{table: efficiency}
         \begin{tabular}{|l|l|} 
@@ -1000,15 +1010,43 @@
         \hline
         \begin{tabular}[c]{@{}l@{}}Unsupervised\\layer-wise~pre-training\end{tabular} & 130.292                                                                             \\ 
         \hline
-        Active learning                                                               & 292.042                                                                              \\
+        Active learning                                                               & 212.453                                                                              \\
         \hline
         \end{tabular}
         \caption{\centering Total training time required for each implemented training process to produce a model with the accuracy outlined in the preceding accuracy table.}
     \end{table}
-    
 
+
+    The overarching results of profiling each training algorithm are exhibited in Table \ref{table: efficiency}, which enumerates the total training time taken to develop each model. This analysis found that the baseline training approach took a total of $198.602$ seconds to produce its high-accuracy DNN; this result was then used to contextualise the efficiency of each subsequent training method. The first of these alternate training processes examined was mixed-precision training; this approach lead to a fairly disappointing result, as the algorithm took $18.98\%$ longer to complete than in the baseline, despite using the same number of epochs. This suggests that utilising 16-bit floating-point representations for evaluating operations during training did not directly improve the energy efficiency of training the DNN. However, the other implemented energy efficiency-focused training adaptations did produce more promising results. 
+
+    Both explored progressive training approaches were shown to generate a significant reduction in the total training time required to produce an accurate model, with unsupervised layer-wise pre-training being the fastest to complete. This method facilitated a $34.40\%$ decrease in training time, taking only $130.292$ seconds in total to complete both the pre-training and full network tuning stages. The unsupervised layer-wise pre-training algorithm also produced an impressive speedup over the baseline approach, although not quite as significant as that of its unsupervised counterpart. Namely, the supervised method reduced the total training time required to generate an accurate model to $154.052$ seconds, improving on the baseline by $22.43\%$, but taking $18.24\%$ longer than the approach utilising unsupervised pre-training. These results indicate that the most efficient way to train DNNs is through unsupervised layer-wise pre-training, taking the least amount of time to produce an accurate model, and hence likely being the most energy-efficient approach. Furthermore, it demonstrates that supervised unsupervised layer-wise pre-training are both viable ways to improve the energy efficiency of DNN training, as they both took significantly less time to train an accurate forecasting model when compared to the baseline approach.
+
+    When the training time of the active learning-based approach is analysed, the results do not indicate that this is an effective method through which the overall length of training can be reduced. Namely, the active learning algorithm using hyperparameters detailed in Section \ref{section: al-model} marginally exceeded the total time spent training by the baseline approach by $6.974\%$. This suggests that active learning is not an effective method when aiming to reduce the direct energy efficiency of DL training by minimising total training time whilst preserving accurate performance. Although, a small proportion of the different parameterisations of the active learning process tested did result in a reduction in training time over the baseline algorithm, which was majoritively achieved by drastically limiting the number of training iterations and training dataset size, and hence in general also inflicted an accuracy drop (Table \ref{table: al-efficiency}). Despite this result, it is not concerning that total training time was not reduced, as active learning majoritively focuses on improving the data efficiency of training, not explicitly the energy efficiency. This process instead intends to improve the ESG impacts of DL by reducing resource requirements, data storage and labelling costs, and the energy consumption of large data centres.
+
+
+    \subsection{Convergence over Training}
+
+    \begin{figure}[ht]
+        \label{fig: convergence}
+        \centering
+        \includegraphics[width=0.6\textwidth]{results/all-training-loss.png}
+        \caption{\centering Convergence over each tested DNN training algorithm, shown as the progression of the output of the loss function (MAE) used at each epoch to determine the prediction error of the networkn (with a steeper gradient indicating a faster convergence rate).}
+    \end{figure}
+
+
+    To further quantify the efficiency of each training approach, the convergence of the training error towards the minimum of the loss function was evaluated. Figure \ref{fig: convergence} depicts the convergence rate of all tested training algorithms, showing the progression of the loss function evaluated over the network after each epoch. The plots show the prediction error output by the loss function firstly on input of the training set (used to adjust the DNN's parameters) and secondly on input of a smaller validation set (a collection of data instances held back from the training process) at each iteration of training.
+
+    When the convergence of the mixed-precision training process is compared to the baseline algorithm, a very similar trend can be seen; both exhibit closely aligned training and validation error curves, implying the models fit well to the training data, and both exhibit a significant decrease in MAE at the start of training with this tapering off in later epochs. The close similarities between both plots suggest that whilst introducing mixed-precision representations has not sped up the training process in terms of convergence per epoch, using these lower bit representations has not degraded the convergence rate of the prediction error towards the minimum of the loss function. Although, upon close inspection of the progression of the validation error over the mixed-precision training process, the curve appears to be slightly rougher than in the baseline case, exhibiting marginally larger fluctuations around the general trend line of convergence over the training process. This suggests that the training process may be slightly less stable when using mixed-precision representations, as the convergence rate is less smooth and uniform than that of the high-precision baseline approach.
+
+    Comparison of the convergence of the two progressive training algorithms demonstrates the different approaches these methods take to developing an accurate model. Firstly, upon inspection of the axes, one can see that the pre-trained DNNs require significantly fewer epochs to optimise the full parameter set than the other training algorithms. The algorithm utilising supervised layer-wise pre-training only required $20$ epochs to facilitate lower training and validation error than the baseline model, with the unsupervised approach only requiring $50$ epochs. Additionally, the initial epochs of both of these algorithms are shown to exhibit a much faster convergence than in the baseline case, reducing both the training and validation error much more rapidly. The convergence plots show that both the supervised and unsupervised layer-wise pre-trained models perform the majority of their minimisation of prediction error within the first 10 epochs, whereas the same reduction is spread over the first 20 epochs in the baseline training process. For example, of the total reduction of validation error from $\sim 0.013$ to $\sim 0.003$ produced by the supervised approach, $90\%$ occurs within the first 10 epochs (decreasing the MAE to $\sim 0.004$). Similarly, $80\%$ of the total reduction in validation MAE ($\sim 0.02 \to \sim 0.005$) in the unsupervised case happens over the first 11 epochs of full network training ($\sim 0.02 \to \sim 0.008$). This demonstrates that the convergence rate of the supervised and unsupervised layer-wise pre-training approaches is greater than that of the baseline algorithm, indicating that progressive training is a significantly more efficient approach as it allows DNNs to learn much faster.
+
+    Analysis of the convergence plot corresponding to the active learning training process similarly highlights that this approach is much more successful in inducing faster learning within a DNN than the baseline algorithm. This is indicated through the incredibly sharp decline in both training and validation error over the early stages of training, generating approximately $83\%$ of the total reduction in validation MAE over the first $8$ epochs. Furthermore, whilst in the baseline case the convergence rate slows considerably after the initial decline in MAE, significantly plateauing after the first $20$ epochs, during active learning the convergence rate stays higher for longer. Namely, a significant reduction in MAE is still observed up to approximately the 32nd epoch, with a plateau only starting to appear after this point. This suggests that the learning process during active learning is more efficient than that of the baseline algorithm, as the network's parameters are optimised more rapidly in the early stages of training.
+
+
+    \subsection{Efficiency Breakdown of Progressive Training}
+    
     % progressive learning efficiency
-    \begin{table}
+    \begin{table}[ht]
         \centering
         \label{table: progressive-efficiency}
         \begin{tabular}{|l|l|l|l|l|l|l|l|l|} 
@@ -1026,34 +1064,76 @@
     \end{table}
 
 
+    To further analyse the benefit provided by progressive training, a detailed study was conducted into the time taken by the supervised and unsupervised layer-wise pre-training algorithms, breaking down how these approaches improve training efficiency. Table \ref{table: progressive-efficiency} enumerates the results of this study, showcasing the computational cost of the pre-training and full network tuning stages of both progressive training algorithms. These results demonstrate the different approaches taken by the progressive training algorithms, laying out how much time (and how many epochs) was spent on pre-training (broken down per layer) and tuning. 
+
+    This study found that supervised layer-wise pre-training was most effective when 20 epochs were used to pre-train each layer, with another 20 epochs used to optimise the full network; in comparison, the unsupervised approach generated the best performance when employing only 7 epochs per pre-training round, then a final tuning round of 50 epochs. Thus, in total the supervised method used 60 low-cost epochs (training only a single layer) and 20 high-cost epochs, whereas the supervised method only employed 21 low-cost epochs but required 50 high-cost epochs. Table \ref{table: progressive-efficiency} illustrates this divergence by showing the proportion of the total training time spent pre-training; the supervised approach allocated $69.63\%$ of this stage, compared to only $33.59\%$ during the unsupervised algorithm. Therefore, whilst unsupervised layer-wise pre-training had a shorter total training time, supervised pre-training facilitated a greater reduction in the required number of full DNN tuning epochs to exceed the performance of the baseline method (exhibiting an $80\%$ decrease in tuning epochs, compared to a $50\%$ decreasing when using the unsupervised approach).
+
+    Table \ref{table: progressive-efficiency} also breaks down how each pre-training round contributed to the overall computational cost of layer-wise pre-training. Of the total pre-training time, the supervised method was found to spend $32.6\%$ of its time training the first LSTM layer of the network, $29.0\%$ on the second layer, and $38.4\%$ on the final layer. Hence, the second hidden layer was faster to pre-train than the initial base model (suggesting the transfer of knowledge between these rounds), but the final LSTM layer was the most computational intensive of all (possible due to the higher-fidelity representations once the network deepens). A different trend was seen over unsupervised pre-training, where the second hidden layer was the most computationally intensive (using $32.6\%$ of the pre-training time), and the final LSTM layer was the fastest ($24.7\%$ of pre-training); this is likely due to the 2nd LSTM layer building up the majority of the representation of the inputs within the autoencoder, meaning the 3rd hidden layer was not required to add as much to the representation learning process (as it could build on the knowledge of its preceding autoencoder layer).
+
+    These results indicate that the two progressive learning implementations reduce the computational cost of training differently. Due to the fewer high-cost epochs required to optimise the full DNN, the tuning round after supervised layer-wise pre-training was less energy intensive than when using the unsupervised method. However, the training time of the unsupervised layer-wise pre-training was in total lower, meaning that whilst more tuning epochs were required, this training approach overall was the most energy-efficient, as the cheap pre-training negated the majority of the computational cost of the subsequent tuning stage.
 
 
+    \subsection{Data Efficiency of Active Learning}
 
-
-    
-
-    \begin{figure}[ht]
-        \label{fig: training-rmse}
+    \begin{table}[ht]
         \centering
-        \includegraphics[width=0.8\textwidth]{results/all-training-rmse.png}
-        \caption{\centering Progression of each model's accuracy over the training process, evaluating its RMSE over the training dataset (blue line) and a validation set of instances held back from training (orange) after each epoch.}
-    \end{figure}
+        \label{table: al-efficiency}
+        \begin{tabular}{|l|l|l|l|l|l|l|l|} 
+        \hline
+        \textbf{\footnotesize Method}                                                            & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Number of}\\\textbf{\footnotesize Iterations}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Sample}\\\textbf{\footnotesize Size}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Final Pool}\\\textbf{\footnotesize Size}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Utilisation of}\\\textbf{\footnotesize Full Training}\\\textbf{\footnotesize Dataset (\%)}\end{tabular} & \textbf{\footnotesize RMSE}    & \textbf{\footnotesize MAPE}     & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Training}\\\textbf{\footnotesize Time (s)}\end{tabular}  \\ 
+        \hline
+        Baseline                                                                   & -                                                                               & -                                                                      & 14600                                                                      & 100                                                                                              & 0.013830         & 14.662217         & 198.602                                                                       \\ 
+        \hline
+        \multirow{12}{*}{\begin{tabular}[c]{@{}l@{}}Active\\Learning\end{tabular}} & \multirow{3}{*}{\textit{200 }}                                                  & 70                                                                     & 14070                                                                      & 96.36                                                                                            & 0.01012          & 9.57100          & 480.603                                                                       \\ 
+        \cline{3-8}
+                                                                                &                                                                                 & 45                                                                     & 9045                                                                       & 61.95                                                                                            & 0.01492          & 10.47995          & 436.716                                                                       \\ 
+        \cline{3-8}
+                                                                                &                                                                                 & \textit{20}                                                            & \textit{4020}                                                              & \textit{27.53}                                                                                   & \textit{0.01863} & \textit{14.03773} & \textit{222.579}                                                              \\ 
+        \cline{2-8}
+                                                                                & \multirow{3}{*}{150}                                                            & 90                                                                     & 13590                                                                      & 93.08                                                                                            & 0.01404          & 12.25406          & 363.479                                                                       \\ 
+        \cline{3-8}
+                                                                                &                                                                                 & 55                                                                     & 8305                                                                       & 56.88                                                                                            & 0.01595          & 13.57484          & 326.668                                                                       \\ 
+        \cline{3-8}
+                                                                                &                                                                                 & 20                                                                     & 3020                                                                       & 20.68                                                                                            & 0.02579          & 25.93023          & 274.484                                                                       \\ 
+        \cline{2-8}
+                                                                                & \multirow{3}{*}{\textit{100 }}                                                  & 140                                                                    & 14140                                                                      & 96.85                                                                                            & 0.01740          & 15.03445          & 239.561                                                                       \\ 
+        \cline{3-8}
+                                                                                &                                                                                 & \textit{80}                                                            & \textit{8080}                                                              & \textit{55.34}                                                                                   & \textit{0.015639} & \textit{11.08715} & \textit{212.453}                                                              \\ 
+        \cline{3-8}
+                                                                                &                                                                                 & 20                                                                     & 2020                                                                       & 13.84                                                                                            & 0.03527          & 29.82608          & 175.556                                                                       \\ 
+        \cline{2-8}
+                                                                                & \multirow{3}{*}{50}                                                             & 250                                                                    & 12750                                                                      & 87.33                                                                                            & 0.01735          & 13.69113          & 176.087                                                                       \\ 
+        \cline{3-8}
+                                                                                &                                                                                 & 135                                                                    & 6885                                                                       & 47.16                                                                                            & 0.02580          & 22.39938          & 124.031                                                                       \\ 
+        \cline{3-8}
+                                                                                &                                                                                 & 20                                                                     & 1020                                                                       & 6.99                                                                                             & 0.03883          & 41.60770          & 89.6995                                                                       \\
+        \hline
+        \end{tabular}
+        \caption{\centering Results of the experimentation into how varying the number of training iterations and sample size effect the data efficiency, resulting accuracy, and training time of an active learning based training algorithm (using GSx and GSy). N.B. notable results are emphasised in italics.}
+    \end{table}
 
-    \begin{figure}[ht]
-        \label{fig: sup-progressive-accuracy}
-        \centering
-        \includegraphics[width=0.8\textwidth]{results/loss-suplayerwise.png}
-        \caption{\centering Progression of the accuracy (MAE and RMSE) of the model using supervised layer-wise pre-training over both pre-training and full network tuning (evaluated at each epoch over the distinct training and validation data).}
-    \end{figure}
 
-    \begin{figure}[ht]
-        \label{fig: unsup-progressive-accuracy}
-        \centering
-        \includegraphics[width=0.8\textwidth]{results/loss-unsuplayerwise.png}
-        \caption{\centering Progression of the accuracy (MAE and RMSE) of the model using unsupervised layer-wise pre-training over both pre-training and full network tuning (evaluated at each epoch over the distinct training and validation data).}
-    \end{figure}
+    Once the energy efficiency of the baseline, mixed-precision, and progressive training algorithms had been thoroughly explored, the data-efficient training process of active learning became the focus of experimentation. Since this approach focusses on simultaneously minimising both the training dataset size and the accuracy drop inflicted by this constriction, active learning is an incredibly adaptable algorithm that can implement a spectrum of accuracy-efficiency compomises. To explore the various balances between accuracy and efficiency achivable, different parameterisations of active learning algorithms were experimented with, manipulating the hyperparameters controlling the number of training iterations and sample size $n_{sample}$. 
 
-    
+    Table \ref{table: al-efficiency} outlines the results of this study, enumerating the different hyperparameter values used and the resulting data efficiency, accuracy, and training time achieved by each active learning procedure. The results demonstrate the general trend that the greater the number of active learning iterations, and the more data added at each iteration, the higher the achieved model accuracy but the lower the data and time efficiency of the training process. Namely, the implementations that use many iterations and a high $n_{sample}$ produce the most accurate models, but utilise the majority of the full training dataset, and require a long training time. For example, the hyperparameters $(N_{iters}, n_{sample}) = (200, 70)$ facilitated a highly performant DNN with a test MAPE of $9.57100$ (a $34.72\%$ decrease from the baseline model), but this required using most of the training data ($96.36\%$ of the full dataset) and a considerably longer training time ($142.0\%$ increase over the baseline).
+
+    However, by tuning these hyperparameters the ability of active learning to facilitate accurate performance whilst considerably reducing training data requirements was shown. Under the hyperparameters $(N_{iters}, n_{sample}) = (200, 20)$, this approach was able to train a DNN that surpassed the performance of the baseline model (reducing the test MAPE by $4.259\%$) using only $27.53\%$ of the amount of training data; this implementation required only $4020$ data instances to train the DNN superior accuracy, compared to the $14600$ instances required in by the baseline training algorithm. Furthermore, whilst this did inflict a longer training time than the baseline, an increase of only $12.07\%$ was observed, suggesting the direct computational cost was not significantly inflated. Another notable parameterisation $(N_{iters}, n_{sample}) = (100, 80)$ was able to produce a model with significantly improved MAPE ($24.38\%$ lower than the baseline) using only $55.34\%$ of the training data, and only inflicting a $6.974\%$ increase in training time. The impressive result solidified this parameterisation as the implementation used to compare the performance of active learning to the other implemented training algorithms in the preceding section. 
+
+    Thus, this study demonstrates how a model developed through active learning can generate predictions with an accuracy commensurate with the baseline model whilst only requiring a small subset of the training dataset. This indicates that active learning is an effective approach for reducing training data requirements whilst maintaining accurate performance.
+
+
+    \section{Extended Discussion}
+
+
+    \subsection{Mixed-Precision Training}
+
+
+    \subsection{Progressive Training}
+
+
+    \subsection{Active Learning}
+
+
 
     % --------------------  CONCLUSIONS ----------------------
     \newpage
