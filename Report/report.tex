@@ -731,22 +731,21 @@
     \begin{table}[ht]
         \centering
         \label{table: architecture}
-        \begin{tabular}{|lll|} 
-            \hline
-            \textbf{Layer Type} & \textbf{Output Shape} & \textbf{Parameter Count}  \\ 
-            \hline
-            Input           & $(batch\_size, 10, 7)$             & -                \\ 
-            \hline
-            LSTM           & $(batch\_size, 10, 24)$             & -                \\ 
-            \hline
-            LSTM           & $(batch\_size, 10, 24)$             & -               \\ 
-            \hline
-            LSTM           & $(batch\_size, 10, 24)$             & -               \\ 
-            \hline
-            FCN            & $(batch\_size, 1)$                   & -                  \\
-            \hline
+        \begin{tabular}{|l|l|l|l|} 
+        \hline
+        \textbf{Layer} & \textbf{Type} & \textbf{Output Shape}   & \textbf{Parameter Count}  \\ 
+        \hline
+        Input layer    & Vector        & $(batch\_size, 10, 7)$  & -                         \\ 
+        \hline
+        Hidden layer 1 & LSTM          & $(batch\_size, 10, 24)$ & 3072                      \\ 
+        \hline
+        Hidden layer 2 & LSTM          & $(batch\_size, 10, 24)$ & 4704                      \\ 
+        \hline
+        Hidden layer 2 & LSTM          & $(batch\_size, 10, 24)$ & 4704                      \\ 
+        \hline
+        Output layer   & FCN           & $(batch\_size, 1)$      & 25                        \\
+        \hline
         \end{tabular}
-
         \caption{\centering Architecture of Baseline LSTM Model}
     \end{table}
 
@@ -761,7 +760,7 @@
             \hline
             \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Window}\\\textbf{\footnotesize Size}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Time Series}\\\textbf{\footnotesize Variables}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Prediction}\\\textbf{\footnotesize Length}\end{tabular} & \textbf{\footnotesize Layers} & \textbf{\footnotesize Neurons} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Learning}\\\textbf{\footnotesize Rate}\end{tabular} & \textbf{\footnotesize Epochs} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Batch}\\\textbf{\footnotesize Size}\end{tabular}  \\ 
             \hline
-            10                                                                      & 7                                                                                 & 1                                                                             & 3               & 16               & 0.001                                                                     & 100             & 32                                                                     \\
+            10                                                                      & 7                                                                                 & 1                                                                             & 3               & 24               & 0.001                                                                     & 100             & 32                                                                     \\
             \hline
         \end{tabular}
 
