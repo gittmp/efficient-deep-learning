@@ -21,7 +21,7 @@
 
 % Manages hyperlinks 
 \usepackage{xurl}
-\usepackage[colorlinks=true, linkcolor=black, urlcolor=red]{hyperref}
+\usepackage[colorlinks=true, citecolor=black, linkcolor=black, urlcolor=blue]{hyperref}
 
 % Bibliography package
 \usepackage[round]{natbib}
@@ -337,22 +337,22 @@
         \text{.}
     \end{align}
 
-    The state $h_t$ is then output by the network along a recurrent loop that connects the output of the network at time $t-1$ to the input of the network at the next timestep $t$. This allows information to be passed between successive versions of the same neural network at different points in time; namely, the network itself stays the same at each computational step, it is only the internal state that changes. The concept can be demonstrated by unrolling the network in time, shown in Figure \ref{fig: rnn-diagram}. \citet{tsantekidis-2022} note that to avoid confusion is important to remember that the sequence of networks depicted in illustrations such as Figure BELOW are in fact just the same network only at different points in time, with the connecting arrows between each signifying that the output at time $t-1$ is being passed on to the same network at the subsequent timestep $t$.
+    The state $h_t$ is then output by the network along a recurrent loop that connects the output of the network at time $t-1$ to the input of the network at the next timestep $t$. This allows information to be passed between successive versions of the same neural network at different points in time; namely, the network itself stays the same at each computational step, it is only the internal state that changes. The concept can be demonstrated by unrolling the network in time, shown in Figure \ref{fig: rnn-diagram}. \citet{tsantekidis-2022} note that to avoid confusion is important to remember that the sequence of networks depicted in illustrations such as Figure \ref{fig: rnn-diagram} are in fact just the same network only at different points in time, with the connecting arrows between each signifying that the output at time $t-1$ is being passed on to the same network at the subsequent timestep $t$.
 
     \begin{figure}[ht]
-        \label{fig: rnn-diagram}
         \centering
         \includegraphics[width=0.7\textwidth]{rnn.png}
-        \caption{\centering Diagram of a RNN at a single timestep $t$ (left) and unrolled in time between timesteps $0$ and $t$ (right)}
+        \caption{\centering Diagram of an RNN at a single timestep $t$ (left) and unrolled in time between timesteps $t=1$ and $t=T$ (right) \citep{zhang-2021}}
+        \label{fig: rnn-diagram}
     \end{figure}
 
-    To capture more information from the input sequences, RNNs can consist of multiple internal layers (shown in Figure BELOW), allowing them to learn higher-dimensional internal representations \citep{bengio-2009}. In this case, each layer $i$ retains its own internal state $h^{(i)}_t$, which is passed on to both the next layer of the network to compute its state $h^{(i+1)}_t$ (at the current input timestep) and reccurred back into itself at the subsequent timestep to compute the state $h^{(i)}_{t+1}$ \citep{zhang-2021}. 
+    To capture more information from the input sequences, RNNs can consist of multiple internal layers (shown in Figure \ref{fig: deep-rnn}), allowing them to learn higher-dimensional internal representations \citep{bengio-2009}. In this case, each layer $i$ retains its own internal state $h^{(i)}_t$, which is passed on to both the next layer of the network to compute its state $h^{(i+1)}_t$ (at the current input timestep) and reccurred back into itself at the subsequent timestep to compute the state $h^{(i)}_{t+1}$ \citep{zhang-2021}. 
 
     \begin{figure}[ht]
-        \label{fig: deep-rnn}
         \centering
         \includegraphics[width=0.4\textwidth]{deep-rnn.png}
-        \caption{\centering Diagram of a multi-layer RNN (showing layers $1$ to $L$) with each layer unrolled in time between timesteps $1$ and $T$}
+        \caption{\centering Diagram of a multi-layer RNN (showing layers $1$ to $L$) with each layer unrolled in time between timesteps $1$ and $T$ \citep{zhang-2021}}
+        \label{fig: deep-rnn}
     \end{figure}
 
 
@@ -383,16 +383,16 @@
 
     \subsection{Long Short-Term Memory Networks}
 
-    Whilst several solutions to the vanishing gradient problem have been proposed---such as \emph{skip connections} and \emph{leaky recurrent units} \citep{pascanu-2012}---by far the most widespread approach is the use of \emph{Long Short-Term Memory} (LSTM), presented by \citet{hochreiter-1997}. An LSTM network is a RNN that uses multiple internal states and parameter matrices to mitigate the vanishing gradient problem and model both short-term and long-term dependencies within sequences. Similarly to an RNN, this architecture contains a core network consistent of one or more layers---where each layer is a distinct LSTM cell---and information is passed both between these cells (from the input to the output layer of the network) and between cell and and itself at the next timestep (reccuring the output at time $t-1$ to be input at time $t$). However, instead of the single recurrent state $h_t$ of the simple RNN, the LSTM contains two: a short-term memory state $h_t$ (analagous to that of a RNN) and long-term memory state $c_t$. This long-term state $c_t$ is used to retain information from far back in the input sequence, adding and forgetting relevant knowledge as the context of the sequence changes. 
+    Whilst several solutions to the vanishing gradient problem have been proposed---such as \emph{skip connections} and \emph{leaky recurrent units} \citep{pascanu-2012}---by far the most widespread approach is the use of \emph{Long Short-Term Memory} (LSTM), presented by \citet{hochreiter-1997}. An LSTM network is an RNN that uses multiple internal states and parameter matrices to mitigate the vanishing gradient problem and model both short-term and long-term dependencies within sequences. Similarly to an RNN, this architecture contains a core network consistent of one or more layers---where each layer is a distinct LSTM cell---and information is passed both between these cells (from the input to the output layer of the network) and between cell and and itself at the next timestep (reccuring the output at time $t-1$ to be input at time $t$). However, instead of the single recurrent state $h_t$ of the simple RNN, the LSTM contains two: a short-term memory state $h_t$ (analagous to that of an RNN) and long-term memory state $c_t$. This long-term state $c_t$ is used to retain information from far back in the input sequence, adding and forgetting relevant knowledge as the context of the sequence changes. 
 
     \begin{figure}[ht]
-        \label{fig: lstm}
         \centering
         \includegraphics[width=0.7\textwidth]{lstm.png}
-        \caption{\centering Diagram of a the arrangement of logical gates within a LSTM cell}
+        \caption{\centering Diagram of a the arrangement of logical gates within an LSTM cell \citep{zhang-2021}}
+        \label{fig: lstm}
     \end{figure}
 
-    At each timestep, the preceding long-term state $c_{t-1}$ is input into the LSTM cell (alongside the current sequence element $x_t$) to compute the new state $c_t$. These updates are achieved through several logical \emph{gates} within the network (between each cell and timestep). Firstly, the \emph{forget gate} is used to decide what information to discard from the previous state $c_{t-1}$. The previous short-term state $h_{t-1}$ and input element $x_t$ are multiplied with the forget gate's weight matrices $W^{(F)}$ and $U^{(F)}$ and added to its bias $b^{(F)}$, the result of which is passed through the \emph{sigmoid} activation function to produce the intermediate state value $\tilde{c}^{(F)}_t$, shown in Equation \ref{eq: forget-gate} \citep{zhang-2021}.
+    At each timestep, the preceding long-term state $c_{t-1}$ is input into the LSTM cell (alongside the current sequence element $x_t$) to compute the new state $c_t$. These updates are achieved through several logical \emph{gates} within the network between each cell and timestep (Figure \ref{fig: lstm}). Firstly, the \emph{forget gate} is used to decide what information to discard from the previous state $c_{t-1}$. The previous short-term state $h_{t-1}$ and input element $x_t$ are multiplied with the forget gate's weight matrices $W^{(F)}$ and $U^{(F)}$ and added to its bias $b^{(F)}$, the result of which is passed through the \emph{sigmoid} activation function to produce the intermediate state value $\tilde{c}^{(F)}_t$, shown in Equation \ref{eq: forget-gate} \citep{zhang-2021}.
 
     \begin{equation}
         \label{eq: forget-gate}
@@ -429,7 +429,7 @@
 
     \subsection{Applications}
 
-    Whilst reviewing modern RNN architectures, \citet{lipton-2015} note that most state-of-the-art applications within the field of sequence learning use a LSTM-based model. Similarly,  in their review of the applications of this architecture and its variants \citet{yu-2019} assert that ``almost all" important recent advancements in this domain have been facilitated by LSTMs. This is primarily due to the architecture's ability to accurately model both long and short-term dependencies in sequences; hence, such networks are largely used for the same sequence modelling problems as traditional RNNs. 
+    Whilst reviewing modern RNN architectures, \citet{lipton-2015} note that most state-of-the-art applications within the field of sequence learning use an LSTM-based model. Similarly,  in their review of the applications of this architecture and its variants \citet{yu-2019} assert that ``almost all" important recent advancements in this domain have been facilitated by LSTMs. This is primarily due to the architecture's ability to accurately model both long and short-term dependencies in sequences; hence, such networks are largely used for the same sequence modelling problems as traditional RNNs. 
 
     Due to the superior accuracy provided by this architecture, one of the most common use cases of LSTMs for sequence learning is NLP. For example, in their exhaustive study of language modelling, \citet{jozefowicz-2016} found an LSTM-based network to provide the most competitive results in this field. Their work evaluated several ML models such as \emph{convolutional neural networks} and RNNs, finding that a large scale LSTM language model produced the best results, significantly improving state-of-the-art \emph{perplexity} (a commonly used NLP metric of prediction error) from $51.3$ to $30.0$ on the commonly used \emph{One Billion Word Benchmark} dataset \citep{chelba-2013}. Recently, LSTM models have been applied to even more complex tasks within the NLP space due to the ability to capture high-fidelity dependencies. This includes the work of \citet{saleh-2021} who used an LSTM-based DNN to detect hate speech in online content, producing an impressive \emph{F1-score} (the weighted average of a model's \emph{precision} and \emph{recall}) of $93\%$ on a composite dataset from multiple online hate speech repositories.
 
@@ -672,7 +672,6 @@
 
     \begin{table}[ht]
         \centering
-        \label{table: time-series}
         \begin{tabular}{|l|lllllll|} 
             \hline
             \textbf{Timestep} & \textbf{Open} & \textbf{Close} & \textbf{High} & \textbf{Low} & \textbf{Volume} & \textbf{Return} & \textbf{Volatility}  \\ 
@@ -690,6 +689,7 @@
         \end{tabular}
 
         \caption{\centering The final 5 timesteps of the multivariate time series (in reverse chronological order).}
+        \label{table: time-series}
     \end{table}
 
 
@@ -697,10 +697,10 @@
 
 
     \begin{figure}[ht]
-        \label{fig: subsequences}
         \centering
         \includegraphics[width=0.8\textwidth]{subsequences.png}
         \caption{\centering Subsequences comprising the multivariate time windowed time series for an example instance from the training dataset}
+        \label{fig: subsequences}
     \end{figure}
 
 
@@ -708,10 +708,10 @@
 
 
     \begin{figure}[ht]
-        \label{fig: volatility-subsequence}
         \centering
         \includegraphics[width=0.6\textwidth]{volatility-subsequence.png}
         \caption{\centering Volatility subsequence for an example data instance, including the true label to be predicted}
+        \label{fig: volatility-subsequence}
     \end{figure}
 
 
@@ -730,7 +730,6 @@
 
     \begin{table}[ht]
         \centering
-        \label{table: architecture}
         \begin{tabular}{|l|l|l|l|} 
         \hline
         \textbf{Layer} & \textbf{Type} & \textbf{Output Shape}   & \textbf{Parameter Count}  \\ 
@@ -747,6 +746,7 @@
         \hline
         \end{tabular}
         \caption{\centering Architecture of Baseline LSTM Model}
+        \label{table: architecture}
     \end{table}
 
 
@@ -755,7 +755,6 @@
 
     \begin{table}[ht]
         \centering
-        \label{table: hyperparams}
         \begin{tabular}{|l|l|l|l|l|l|l|l|} 
             \hline
             \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Window}\\\textbf{\footnotesize Size}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Time Series}\\\textbf{\footnotesize Variables}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Prediction}\\\textbf{\footnotesize Length}\end{tabular} & \textbf{\footnotesize Layers} & \textbf{\footnotesize Neurons} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Learning}\\\textbf{\footnotesize Rate}\end{tabular} & \textbf{\footnotesize Epochs} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Batch}\\\textbf{\footnotesize Size}\end{tabular}  \\ 
@@ -765,6 +764,7 @@
         \end{tabular}
 
         \caption{\centering Hyperparameters of Baseline LSTM Model}
+        \label{table: hyperparams}
     \end{table}
 
 
@@ -775,10 +775,10 @@
 
 
     \begin{figure}[ht]
-        \label{fig: traintest-split}
         \centering
         \includegraphics[width=0.8\textwidth]{traintest-split.png}
         \caption{\centering Visualisation of the $80 \colon 20$ train-test split dividing training instances (blue) and testing instances (orange)}
+        \label{fig: traintest-split}
     \end{figure}
 
 
@@ -848,7 +848,7 @@
 
     To implement mixed-precision training, part of the Tensorflow ML framework \citep{abadi-2016} known as the \emph{Keras mixed-precision API} was exploited. This API enables ML developers to adapt the precision of variables and operations within an implemented DNN, changing the default $32$-bit precision typically used by DL models implemented in Tensorflow. In this research, the mixed precision API is used to specify a \emph{`mixed\_float16'} precision policy \citep{abadi-2016}, where a combination of $16$-bit and $32$-bit floating-point data types are used during training. Specifically, this instructs Tensorflow to use a $16$-bit floating-point representation for evaluating network computations, whilst maintaining a $32$-bit floating-point representation for storing variables. Using lower precision reduces the amount of memory used by network operations, increasing the speed of calculations and reading from memory by minimising their computational load and allowing increased hardware acceleration. Specifically, $16$-bit representations are utilised as modern GPUs and TPUs have been shown to run operations significantly faster when using $16$-bit precision, as batches of data consume half the amount of memory when being passed through the DNN. High precision is still used for storing variables to maintain numerical stability, ensuring that the model maintains accurate performance. Hence, this implementation of mixed-precision training strikes a compromise between increasing the speed (and reducing the energetic cost) of network operations during DNN training and preserving accurate performance.
 
-    The efficiency benefits provided by mixed-precision training were evaluated by using the same DNN as proposed in Section \ref{section: baseline}. First, the use of a `mixed\_float16' precision policy is specified; an identical network with the same LSTM-based architecture and hyperparameters of the baseline model (Tables \ref{table: architecture} and \ref{table: hyperparams}) is then implemented using variables of the specified precision. This DNN is trained using the same training algorithm as in the baseline case, for the same number of epochs. Once training is complete, both the accuracy of the model's performance, and efficiency of the training approach are evaluated, computing the $R^2$, MAE, RMSE, and MAPE of the optimised DNN, and the total time and memory used over the training process. These metrics are then put into context against those computed for the baseline model, demonstrating the new efficiency gains of the new model, and exemplifying the benefit of mixed-precision training for reducing the energy consumption, carbon emissions, and ESG impacts of DL-based financial volatility forecasting models.
+    The efficiency benefits provided by mixed-precision training were evaluated by using the same DNN as proposed in Section \ref{section: baseline}. First, the use of a `mixed\_float16' precision policy is specified; an identical network with the same LSTM-based architecture and hyperparameters of the baseline model (Tables \ref{table: architecture} and \ref{table: hyperparams}) is then implemented using variables of the specified precision. This DNN is trained using the same training algorithm as in the baseline case, for the same number of epochs. Once training is complete, both the accuracy of the model's performance, and efficiency of the training approach are evaluated, computing the $R^2$, MAE, RMSE, and MAPE of the optimised DNN, and the total training time. These metrics are then put into context against those computed for the baseline model, demonstrating the new efficiency gains of the new model, and exemplifying the benefit of mixed-precision training for reducing the energy consumption, carbon emissions, and ESG impacts of DL-based financial volatility forecasting models.
 
 
     \subsubsection{Supervised Layer-wise Pre-Training}
@@ -859,7 +859,7 @@
 
     The first round of layer-wise pretraining focuses on training the base network. This shallow network is trained for $30$ epochs over the full dataset $D_{train}$, optimising the parameters of the single LSTM layer and the DNN's output layer (which is a fully-connected single neuron, as in the baseline model). After this initial pre-training round, the parameters of the first LSTM layer are fixed, a new LSTM layer is added between the initial hidden layer and the output layer, and this new layer is trained over the next $30$ epochs. This iterative process was repeated until a DNN with $3$ LSTM layers was constructed, meaning this experimentation utilised the same architecture as in the baseline case. After the full network is pre-trained, final tuning begins, where all network parameters are unfixed and optimised over $20$ additional epochs, starting from the initialisation values deduced during pre-training.
 
-    Once a fully trained network was developed, its performance was evaluated on the testing dataset. This involved the calculation of the $R^2$, MAE, RMSE, and MAPE of test predictions, to deduce the accuracy of the model produced through supervised layer-wise pre-training, and quantify the performance difference to the baseline model. The efficiency of this training approach was also evaluated, measuring the total training time (consisting of the pre-training and tuning times) and memory consumption.
+    Once a fully trained network was developed, its performance was evaluated on the testing dataset. This involved the calculation of the $R^2$, MAE, RMSE, and MAPE of test predictions, to deduce the accuracy of the model produced through supervised layer-wise pre-training, and quantify the performance difference to the baseline model. The efficiency of this training approach was also evaluated, measuring the total training time over both pre-training and tuning.
 
 
     \subsubsection{Unsupervised Layer-wise Pre-Training}
@@ -868,7 +868,7 @@
 
     Using the same hyperparameters as were experimentally devised in the supervised case, the implemented unsupervised layer-wise pre-training approach began by initialising a similar single-layer LSTM base network. The base architecture was identical to the previously exploited base network, except a different output layer was utilised to enable unsupervised learning. The new output layer consisted of the same dimensions as the input layer such that the network could be trained as an autoencoder. Since the same training dataset of multivariate time series subsequences was utilised, the unsupervised pre-training approach trained each layer to reconstruct this subsequence, meaning the network learned to output a representation of the input time series (tuning its parameters to minimise the difference between each layer's inputs and outputs). Hence, over the first $30$ epochs of pre-training, the single-layer LSTM network learned as an unsupervised autoencoder to reconstruct the multivariate sequence instances of the training dataset. After completion of this initial pre-training round, another LSTM layer was added to the DNN. The new layer was then trained independently also as an autoencoder, minimising the difference between its inputs and outputs. This unsupervised learning is repeated over all $3$ pre-training rounds, iteratively building up an autoencoder network of $3$ LSTM layers. The concluding full network tuning is then used to convert this autoencoder into a volatility forecasting model that predicts the HV $\hat{v}_{t+1}$ at timestep $t+1$ of the input time series. To achieve this, the autoencoder output layer used during pre-training is discarded, and a new output layer is appended that consists of a single fully-connected neuron (for predicting a single volatility value). The parameters of the full network are then optimised over the $20$-epoch tuning process, using supervised learning to develop an accurate forecasting model from the training data.
 
-    To compare the effectiveness of unsupervised layer-wise pre-training to both the supervised approach and baseline training method, the same accuracy ($R^2$, MAE, RMSE, and MAPE) and efficiency (training time and memory consumption) metrics were computed (over training and upon the testing dataset). This allows an analysis of the energy efficiency of this implementation of progressive training, demonstrating the benefits it provides to reducing the energy consumption and carbon emissions of training DNNs for financial volatility forecasting (and Fintech in general).
+    To compare the effectiveness of unsupervised layer-wise pre-training to both the supervised approach and baseline training method, the same accuracy ($R^2$, MAE, RMSE, and MAPE) and efficiency (total training time) metrics were computed (over training and upon the testing dataset). This allows an analysis of the energy efficiency of this implementation of progressive training, demonstrating the benefits it provides to reducing the energy consumption and carbon emissions of training DNNs for financial volatility forecasting (and Fintech in general).
 
 
     \section{Data-Efficient Training Extensions}
@@ -925,7 +925,7 @@
 
     In their research, \citet{wu-2019} found that the use of GSx and GSy-based active learning both improved the data efficiency of training and produced a model that exhibits impressive generalisability and lower RMSE than comparable approaches using random sampling to select data instances. This demonstrates the effectiveness and robustness of active learning training that uses GSx and GSy; hence, the experimentation into data-efficient training for DNNs presented in this thesis utilises GSx for picking the seed pool and GSy for sampling pool instances during later training rounds. Specifically, GSx is initially used to generate a seed of $n_{sample} = 100$ data instances before the first iteration of active learning training begins, setting this as the pool $P^{(1)}$ and the remaining $N - 100$ data instances from the full training dataset as the validation set $V^{(1)}$. GSy is then used at each training iteration $i$ to select a further $100$ data instances to move from the validation set $V^{(i)}$ into the pool $P^{(i)}$. The full $3$-layer LSTM-based DNN proposed in Section \ref{section: baseline} is utilised over this iterative process, training over the expanding pool set for $100$ training rounds.
 
-    To evaluate how effective and efficient this training process is, and the accuracy of the model it produces, the metrics outlined in Section \ref{section: metrics} are utilised. These inform a comparative analysis between the DNN produced through active learning and the baseline model, and an evaluation of the time and memory efficiency of their training processes. Furthermore, a close inspection of the amount of data utilised over the training process is made, demonstrating how effective active learning is at reducing the data requirements of training DNNs within the domain of LSTM-based financial volatility forecasting. Whilst proposing the GSx and GSy algorithms, \citet{wu-2019} note several limitations with this approach; most notably, they found that when the pool size during the early stages of training is too small (and too few instances are added at each iteration) the model being built exhibits very high variance, meaning its performance is not reliable. Hence, to properly explore the benefits and drawbacks of active learning for improving the data and energy efficiency of DNN training (in the context of volatility forecasting) the convergence of the model's parameters towards the minimum of the loss function is analysed, and the progression of its performance inspected over each training round, documenting the robustness of this training approach.
+    To evaluate how effective and efficient this training process is, and the accuracy of the model it produces, the metrics outlined in Section \ref{section: metrics} are utilised. These inform a comparative analysis between the DNN produced through active learning and the baseline model, and an evaluation of the efficiency of their training processes. Furthermore, a close inspection of the amount of data utilised over the training process is made, demonstrating how effective active learning is at reducing the data requirements of training DNNs within the domain of LSTM-based financial volatility forecasting. Whilst proposing the GSx and GSy algorithms, \citet{wu-2019} note several limitations with this approach; most notably, they found that when the pool size during the early stages of training is too small (and too few instances are added at each iteration) the model being built exhibits very high variance, meaning its performance is not reliable. Hence, to properly explore the benefits and drawbacks of active learning for improving the data and energy efficiency of DNN training (in the context of volatility forecasting) the convergence of the model's parameters towards the minimum of the loss function is analysed, and the progression of its performance inspected over each training round, documenting the robustness of this training approach.
 
 
     % --------------------  EVALUATION ----------------------
@@ -943,10 +943,10 @@
 
 
     \begin{figure}[ht!]
-        \label{fig: predictions}
         \centering
         \includegraphics[width=0.5\textwidth]{results/all-predictions.png}
         \caption{\centering Predicted volatility time series of each tested model (orange dashed line) against the true volatility time series (blue) over testing dataset.}
+        \label{fig: predictions}
     \end{figure}
 
 
@@ -964,7 +964,6 @@
 
     % accuracy metrics
     \begin{table}[ht]
-        \label{table: accuracy}
         \centering
         \begin{tabular}{|l|l|l|l|l|} 
         \hline
@@ -982,6 +981,7 @@
         \hline
         \end{tabular}
         \caption{\centering Accuracy data for all methods, evaluated over the testing datset.}
+        \label{table: accuracy}
     \end{table}
 
 
@@ -1004,7 +1004,6 @@
     % efficiency metrics
     \begin{table}[ht]
         \centering
-        \label{table: efficiency}
         \begin{tabular}{|l|l|} 
         \hline
         \textbf{Method}                                                               & \begin{tabular}[c]{@{}l@{}}\textbf{Total Training }\\\textbf{Time (s)}\end{tabular}  \\ 
@@ -1021,6 +1020,7 @@
         \hline
         \end{tabular}
         \caption{\centering Total training time required for each implemented training process to produce a model with the accuracy outlined in the preceding accuracy table.}
+        \label{table: efficiency}
     \end{table}
 
 
@@ -1035,10 +1035,10 @@
 
 
     \begin{figure}[ht!]
-        \label{fig: convergence}
         \centering
         \includegraphics[width=0.6\textwidth]{results/all-training-loss.png}
         \caption{\centering Convergence over each tested DNN training algorithm, shown as the progression of the output of the loss function (MAE) used at each epoch to determine the prediction error of the networkn (with a steeper gradient indicating a faster convergence rate).}
+        \label{fig: convergence}
     \end{figure}
 
 
@@ -1056,7 +1056,6 @@
     % progressive learning efficiency
     \begin{table}[ht]
         \centering
-        \label{table: progressive-efficiency}
         \begin{tabular}{|l|l|l|l|l|l|l|l|l|} 
         \hline
         \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Pre-Training}\\\textbf{\footnotesize Method}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Pre-}\\\textbf{\footnotesize Training}\\\textbf{\footnotesize Time~(s)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\textbf{\footnotesize Pre-}}\\\textbf{\footnotesize Training}\\\textbf{\footnotesize Epochs}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Layer}\\\textbf{\footnotesize 1~(\%)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Layer}\\\textbf{\footnotesize 2~(\%)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Layer}\\\textbf{\footnotesize 3~(\%)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Tuning}\\\textbf{\footnotesize Time}\\\textbf{\footnotesize (s)}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Tuning}\\\textbf{\footnotesize Epochs}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Total}\\\textbf{\footnotesize Time}\\\textbf{\footnotesize (s)}\end{tabular}  \\ 
@@ -1069,6 +1068,7 @@
         \hline
         \end{tabular}
         \caption{\centering The time taken by pre-training and full network tuning for both supervised and unsupervised layer-wise pre-training (including a breakdown of the time spent pre-training each of the 3 internal LSTM layers), compared to the total time taken by the baseline method.}
+        \label{table: progressive-efficiency}
     \end{table}
 
 
@@ -1085,7 +1085,6 @@
 
     \begin{table}[ht]
         \centering
-        \label{table: al-efficiency}
         \begin{tabular}{|l|l|l|l|l|l|l|l|} 
         \hline
         \textbf{\footnotesize Method}                                                            & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Number of}\\\textbf{\footnotesize Iterations}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Sample}\\\textbf{\footnotesize Size}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Final Pool}\\\textbf{\footnotesize Size}\end{tabular} & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Utilisation of}\\\textbf{\footnotesize Full Training}\\\textbf{\footnotesize Dataset (\%)}\end{tabular} & \textbf{\footnotesize RMSE}    & \textbf{\footnotesize MAPE}     & \begin{tabular}[c]{@{}l@{}}\textbf{\footnotesize Training}\\\textbf{\footnotesize Time (s)}\end{tabular}  \\ 
@@ -1118,6 +1117,7 @@
         \hline
         \end{tabular}
         \caption{\centering Results of the experimentation into how varying the number of training iterations and sample size effect the data efficiency, resulting accuracy, and training time of an active learning based training algorithm (using GSx and GSy). N.B. notable results are emphasised in italics.}
+        \label{table: al-efficiency}
     \end{table}
 
 
