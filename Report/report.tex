@@ -318,7 +318,7 @@
     \begin{figure}[ht]
         \centering
         \includegraphics[width=0.7\textwidth]{rnn.png}
-        \caption{\centering Diagram of an RNN at a single timestep $t$ (left) and unrolled in time between timesteps $t=1$ and $t=T$ (right) \citep{zhang-2021}}
+        \caption{\centering Diagram of an RNN at a single timestep $t$ (left) and unrolled in time between timesteps $t=1$ and $t=T$ (right) \citep{zhang-2021}.}
         \label{fig: rnn-diagram}
     \end{figure}
 
@@ -326,13 +326,11 @@
 
     \begin{figure}[ht]
         \centering
-        \includegraphics[width=0.3\textwidth]{deep-rnn.png}
-        \caption{\centering Diagram of a multi-layer RNN (showing layers $1$ to $L$) with each layer unrolled in time between timesteps $1$ and $T$ \citep{zhang-2021}}
+        \includegraphics[width=0.25\textwidth]{deep-rnn.png}
+        \caption{\centering Diagram of a multi-layer RNN (showing layers $1$ to $L$) with each layer unrolled in time between timesteps $1$ and $T$ \citep{zhang-2021}.}
         \label{fig: deep-rnn}
     \end{figure}
 
-
-    \subsection{Training}
 
     RNNs are trained through a similar backpropagation process to that used by traditional DNNs. This is done through computing the final output of the network on a given sequence and evaluating the loss function between this and the true result to compute the network's error. The error is then propagated backwards through both the internal layers of the network and through time to the network state at each timestep of the input sequence---and hence is referred to as \emph{backpropagation through time} \citep{zhang-2021}. This allows the training procedure to adjust both the network parameters (weights $W$ and biases $b$) and the parameters $\theta^{(g)}$ of the state function $g$.
 
@@ -353,8 +351,8 @@
 
     \begin{figure}[ht]
         \centering
-        \includegraphics[width=0.6\textwidth]{lstm.png}
-        \caption{\centering Diagram of a the arrangement of logical gates within an LSTM cell \citep{zhang-2021}}
+        \includegraphics[width=0.5\textwidth]{lstm.png}
+        \caption{\centering Diagram of a the arrangement of logical gates within an LSTM cell \citep{zhang-2021}.}
         \label{fig: lstm}
     \end{figure}
 
@@ -405,7 +403,7 @@
     Numerous sources, such as \citet{cao-2017} and \citet{feliz-2021}, have deduced that this inefficiency is directly caused by the sequential nature of RNNs. They assert that the many dependencies within LSTM cells (between cells and to the input sequence) restrict how these models can be trained and used. Specifically, cells in an LSTM network take input from both the input sequence and preceding cells; each cell in every network layer and timestep receives both an input vector and two memory states, introducing both temporal dependencies (between cell states at each timestep) and layerwise dependencies (between the output and input of each network layer). Both \citet{cao-2017} and \citet{feliz-2021} identify that this means LSTMs cannot effectively exploit parallelisation, as variables with sequential dependencies must be computed serially. Thus, these networks cannot fully take advantage of the computational speedups provided by specialised hardware such as \emph{Graphics Processing Units} (GPUs) and \emph{Tensor Processing Units} (TPUs) that have been effectively used to parallelise other DNNs, making training long and energy-intensive. Furthermore, these arcitectures require significant amounts of energy to store and fetch parameters \citep{feliz-2021}, and amount large memory costs calculating large intermediate values during state updates \citep{cao-2017}.
 
 
-    \section{Financial Risk Modelling}
+    \section{Financial Volatility Modelling}
 
     Predicting stock price movements is a common example of sequence-to-sequence modelling that has received great attention within the field of deep learning for finance, with numerous reviews extensively exploring the area (such as \citet{sezer-2019} and \citet{jiang-2021}) and innovative approaches continually pushing the boundaries of prediction accuracy \citep{darapaneni-2022}. Despite this plethora of research, it is still a challenging task to accurately model price movements in real financial markets due to the complexity of financial systems, non-linear relationships between financial variables, and high-frequency variations in values \citep{timmermann-2004}.
 
@@ -414,9 +412,7 @@
 
     The challenges associated with market price prediction mean that within the finance industry a more helpful use case of sequence-to-sequence modelling is forecasting financial risk. In their white paper explaining the applications and benefits of ML for financial modelling, \citet{laplante-2019} exemplify this sentiment, asserting that ANNs provide the most utility for highlighting potential risks, not explicitly modelling variable movements. In fact, a recent survey of financial professionals by \citet{chartis-2019} found that $70\%$ of respondents use ML tools in the financial risk sector, majoritively for analysing ``market risk for the trading book" ($51\%$ of respondents) and ``market risk for the banking book" ($44\%$). This trend is echoed by \citet{peng-2021} in their review of Fintech, DL, and financial risk; they assert that modelling risk is currently in high demand due to the large fluctuations, uncertainty, and high volatility exhibited in financial markets, making risk an important consideration when making financial decisions. Furthermore, \citet{mashrur-2020} highlight that financial market risk typically exhibits identifiable trends as risk patterns reoccur in cycles, facilitating accurate modelling based upon historical data.
 
-    For these reasons, modelling financial market risk is a popular application of DL. This typically involves the development of statistical models to forecast trends within different risk measures such as \emph{value-at-risk} (VaR) and \emph{volatility} \citep{peng-2021}. VaR estimates the value an asset is likely to lose over a given time period, to a specified confidence level, returning a value that indicates the maximum expected loss over that period at that confidence level. Alternatively, volatility can be defined as the scale of fluctuations in the pricing of an asset within a financial market over time and is intrinsically related to the risk associated with that asset \citep{cavalcante-2016}.
-    
-    \citet{cavalcante-2016} assert that volatility is a vital measure to financial analysis, as it is a key indicator of the state of many economic and external factors that affect financial markets (such as investor sentiment and political conditions). This is because changes to these factors directly affect the volatility of a market; for instance, in times of economic crisis or political instability, volatility tends to rise, meaning large price variations of assets are likely, and the market is high risk \citep{sezer-2019}. Because of this relationship between volatility and risk, \citet{tino-2001} highlight that volatility changes are typically used as buy and sell signals to investors; \citet{ge-2022} similarly assert market volatility dictates many decisions of market players. Hence, forecasting market volatility is a popular modelling domain. In fact, whilst analysing models for the financial derivatives market, \citet{ozbayoglu-2020} found that most research into ML and DL-based modelling in this field either focuses on pricing or volatility estimation. This popularity is further demonstrated through the plethora of academic reviews of this field, such as those by \citet{poon-2003} and \citet{ge-2022}, and the spectrum of recently proposed models.
+    Hence, modelling financial market risk is a popular application of DL; commonly this involves forecasting the \emph{volatility} of an asset or market \citep{peng-2021}. \citet{cavalcante-2016} define volatility as the scale of fluctuations in the pricing of an asset within a financial market over time and is intrinsically related to the risk associated with that asset. \citeauthor{cavalcante-2016} assert that volatility is a vital measure to financial analysis, as it is a key indicator of the state of many economic and external factors that affect financial markets (such as investor sentiment and political conditions). This is because changes to these factors directly affect the volatility of a market; for instance, in times of economic crisis or political instability, volatility tends to rise, meaning large price variations of assets are likely, and the market is high risk \citep{sezer-2019}. Because of this relationship between volatility and risk, \citet{tino-2001} highlight that volatility changes are typically used as buy and sell signals to investors; \citet{ge-2022} similarly assert market volatility dictates many decisions of market players. Hence, forecasting market volatility is a popular modelling domain. In fact, whilst analysing models for the financial derivatives market, \citet{ozbayoglu-2020} found that most research into ML and DL-based modelling in this field either focuses on pricing or volatility estimation. This popularity is further demonstrated through the plethora of academic reviews of this field, such as those by \citet{poon-2003} and \citet{ge-2022}, and the spectrum of recently proposed models.
 
     \subsection{Measures of Volatility}
 
@@ -629,7 +625,7 @@
     \begin{figure}[ht]
         \centering
         \includegraphics[width=0.8\textwidth]{subsequences.png}
-        \caption{\centering Subsequences comprising the multivariate time windowed time series for an example instance from the training dataset}
+        \caption{\centering Subsequences comprising the multivariate time windowed time series for an example instance from the training dataset.}
         \label{fig: subsequences}
     \end{figure}
 
@@ -667,7 +663,7 @@
 
     After training, the DNNs predictions over $D_{test}$ are analysed through statistical metrics that quantify the modelling error $\varepsilon$ and prediction accuracy. These accuracy metrics measure the divergence between the predicted volatility time series value $\hat{y}_t = \hat{v}_{t+1}$ and the true label $y_t = v_{t+1}$ enumerating the actual recorded HV at that future timestep. These metrics are important as they not only demonstrate the success of the baseline model, but will later be used to contextualise the effect of the implemented energy and data-efficient adaptations, highlighting their impact on performance. 
 
-    One metric commonly used to quantify forecasting performance is the \emph{coefficient of determination} $R^2$ \citep{zhang-2022}, which computes the ratio between the estimated variance of the prediction error $\varepsilon$ and the variance of the variable $y_t$ being predicted, shown in Equation \ref{eq: r-squared} for the predictions $\hat{y}_t$ (and the sample mean of labels $\mu_{y}$). The value of $R^2$ for a given set of predictions represents the proportion of the variability in the label set that is correctly captured by the model's predictions. This value ranges between $- \infty$ and $1$, with a score of $1$ meaning the true labels have been perfectly represented. The coefficient of determination is an effective metric for demonstrating how well a model represents data, and has been used to showcase the performance of several volatility models such as the ANN implementation of \citet{zhang-2022}. However, it also has several limitations. Most notably, this metric doesn't explicitly quantify whether a model is good or bad, it only shows whether the testing performance is noticeably better than that of a comparison \emph{constant model} that outputs predictions simply as the sample mean of the observed inputs; hence, its results can sometimes be misleading.
+    One metric commonly used to quantify forecasting performance is the \emph{coefficient of determination} $R^2$ \citep{zhang-2022}, which computes the ratio between the estimated variance of the prediction error $\varepsilon$ and the variance of the variable $y_t$ being predicted, shown in Equation \ref{eq: r-squared} for the predictions $\hat{y}_t$ (and sample mean of labels $\mu_{y}$). The value of $R^2$ for a given set of predictions represents the proportion of the variability in the label set that is correctly captured by the model's predictions; it ranges between $- \infty$ and $1$, with a score of $1$ meaning the true labels have been perfectly represented. This an effective metric for demonstrating how well a model represents data, and has been used to showcase the performance of several volatility models such as the ANN implementation of \citet{zhang-2022}. However, it also has several limitations. Most notably, this metric doesn't explicitly quantify whether a model is good or bad, it only shows whether the testing performance is noticeably better than that of a comparison \emph{constant model} that outputs predictions simply as the sample mean of the observed inputs; hence, its results can sometimes be misleading.
 
 
     \begin{equation}
@@ -714,8 +710,8 @@
 
     \subsection{Aims of Study}
 
-    Before analysing the efficiency of each training algorithm, a baseline model characteristic of those used in Fintech must be implemented. This should ensure that the findings of this research are universal, demonstrating on a wide scale how the ESG impacts of DL for finance can be mitigated. With this in mind, a common application of DL within finance must be chosen, and a DNN-based model used that has an architecture most typical of existing approaches developed for this domain. The resource requirements of this model can then be analysed to demonstrate the typical computational, energetic, and carbon cost of DL models for finance. This research should give a specific example of the environmental impact of DL highlighted by \citet{schwartz-2019} and \citet{strubell-2019}, and reinforce the concerning energy consumption and carbon emission figures presented by \citet{hockstad-2018} and \citet{masanet-2020}.
-
+    Before analysing the efficiency of each training algorithm, a baseline model characteristic of those used in Fintech must be implemented. This should ensure that the findings of this research are universal, demonstrating on a wide scale how the ESG impacts of DL for finance can be mitigated. With this in mind, a common application of DL within finance must be chosen, and a DNN-based model used that has an architecture most typical of existing approaches developed for this domain. The resource requirements of this model can then be analysed to demonstrate the typical computational, energetic, and carbon cost of DL models for finance, exemplifying computational cost of DL algorithms highlighted by \citet{amodei-2018} and \citet{schwartz-2019}.
+    
 
     \subsection{Baseline Volatility Forecasting Model}
     \label{section: model-architecture}
@@ -731,18 +727,18 @@
         \hline
         \textbf{Layer} & \textbf{Type} & \textbf{Output Shape}   & \textbf{Parameter Count}  \\ 
         \hline
-        Input layer    & Vector        & $(batch\_size, 10, 7)$  & -                         \\ 
+        Input layer    & Vector        & $(32, 10, 7)$  & -                         \\ 
         \hline
-        Hidden layer 1 & LSTM          & $(batch\_size, 10, 24)$ & 3072                      \\ 
+        Hidden layer 1 & LSTM          & $(32, 10, 24)$ & 3072                      \\ 
         \hline
-        Hidden layer 2 & LSTM          & $(batch\_size, 10, 24)$ & 4704                      \\ 
+        Hidden layer 2 & LSTM          & $(32, 10, 24)$ & 4704                      \\ 
         \hline
-        Hidden layer 2 & LSTM          & $(batch\_size, 10, 24)$ & 4704                      \\ 
+        Hidden layer 2 & LSTM          & $(32, 10, 24)$ & 4704                      \\ 
         \hline
-        Output layer   & FCN           & $(batch\_size, 1)$      & 25                        \\
+        Output layer   & Fully-connected           & $(32, 1)$      & 25                        \\
         \hline
         \end{tabular}
-        \caption{\centering Architecture of Baseline LSTM Model}
+        \caption{\centering Architecture of the LSTM model implementation.}
         \label{table: architecture}
     \end{table}
 
@@ -760,7 +756,7 @@
             \hline
         \end{tabular}
 
-        \caption{\centering Hyperparameters of Baseline LSTM Model}
+        \caption{\centering Hyperparameters of baseline model implementation and training algorithm.}
         \label{table: hyperparams}
     \end{table}
 
