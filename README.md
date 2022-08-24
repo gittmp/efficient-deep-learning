@@ -1,28 +1,22 @@
 # Energy-Efficient Deep Learning for Finance
 
-This thesis investigates the use of energy-efficient methods for deep learning-based financial volatility forecasting, aiming to reduce the energetic cost of such models and demonstrate how the sustainability of deep learning for finance can be improved.
-
-**Context/background:** The financial sector has long been associated with largely negative environmental, social, and governance (ESG) impacts, including being a major contributor to global carbon emissions. Despite the attempts by some to prioritise *sustainable finance*, the recent expansion of financial technology---incorporating new, expensive methods such as *deep learning* (DL)---has only worsened the energy consumption attributed to this industry, accelerating its carbon emissions.
-        
-**Aims:** In an attempt to address these negative impacts of financial technology, this project aims to develop an energy-efficient DL system for financial modelling. This research will explore *Green AI* methods that attempt to reduce the energy expended training DL models and apply these for the first time to models used in finance. To exemplify the benefits of these methods, a performant financial volatility model will be developed that not only produces accurate results but prioritises generating this performance in an efficient manner, minimising the energy and data resources required during training. This system aims to demonstrate that the principles of Green AI are applicable within the financial sector, furthering the scope of sustainable finance by improving the sustainability of deep learning for finance and, hence, minimising the ESG impacts of the financial sector.
-        
-**Method:** This research will commence with an analysis of the resource requirements of typical systems in the field of deep learning for finance. A particular focus will be given to the domain of financial volatility modelling, as this is a major application of deep learning in finance, and the *long short-term memory* (LSTM) networks typically exploited for such tasks. Energy and data-efficient training methods will be explored, developing a deep model that consumes less energy and requires less data to train, but maintains accurate performance. Specifically, methods such as *active learning*, *progressive training*, and *mixed-precision* will be explored that reduce the resource requirements of training, proving the feasibility of efficient models within this field.
-
-**Contributions to science:**
-1. *Expanding the applications of Green AI*. The first application of Green AI to the finance sector, further demonstrating the utility and importance of Green AI in lowering the environmental cost of deep learning. 
-
-2. *Reducing the environmental impact of financial technology*. The improvement of sustainable finance to include the new research domain of \emph{sustainable deep learning for sustainable finance}. 
-
-3. *Improving the inclusivity of finance*. Lowering the bar-to-entry to engage in deep learning for finance,  allowing more individuals to leverage financial technology and analytics.
+This thesis investigates the efficiency of deep learning training algorithms, exploring how deep neural networks can be trained in a way that minimises energy consumption and training data requirements. These energy and data-efficient training algorithms are applied to financial modelling, demonstrating how the computational cost of deep learning in finance can be reduced. The financial sector has long been associated with negative environmental, social, and governance (ESG) impacts, including being a major contributor to global carbon emissions. Despite the attempts by some to prioritise *sustainable finance*, the recent expansion of financial technology—incorporating new, expensive methods such as *deep learning* (DL)—has only worsened the energy consumption attributed to this industry, accelerating its carbon emissions. To address these negative impacts, this project develops energy-efficient DL training algorithms for financial models. This research explores Green AI—a research domain aiming to mitigate the energy budget of DL algorithms—and applies these methods for the first time to the models and algorithms used in finance. To exemplify the benefits of these methods, a performant financial volatility model is developed that not only produces accurate results but prioritises generating this performance in an efficient manner, minimising the energy and data resources required during training. This research aims to demonstrate how the principles of Green AI are applicable within the financial sector, furthering the scope of sustainable finance by improving the sustainability of deep learning for finance and, hence, minimising the ESG impacts of the financial sector.
 
 **Outline of research:** 
 
-- <ins> Baseline finanical volatility model </ins>. An initial deep model will be implemented, using a traditional training process and LSTM architecture, to act as an exemplar of the resource requirements of this domain.
+- <ins> Chapter 3: *Methodology* </ins>. This research commences by implementing a baseline model, dataset, and training algorithm characteristic of those used for DL in finance. A particular focus will be given to the domain of financial volatility modelling, as this is a major application of deep learning in finance, and the *long short-term memory* networks typically exploited for such tasks. This analysis acts as an exemplar of the computational cost of typical deep learning algorithms used in finance.
 
-- <ins> Energy-efficient training extensions </ins>. Several adaptations to the model training process will be made that prioritise reducing the energy consumed by the system.
-            
-- <ins> Data-efficient training extensions </ins>. Additional adaptations will be made that reduce the necessary amount of training data, further lowering resource requirements.
-            
-- <ins> Discussion \& evaluation </ins>. An analysis will be made between the baseline and extended models, comparing the performance and efficiency of each, and discussing their success in reducing resource requirements.
+- <ins> Chapter 4: *Energy-Efficient Training Algorithms* </ins>. Alternative training algorithms are then implemented that prioritise reducing the energy consumed by DL whilst maintaining an accurately performing model. Specifically, progressive training, and mixed-precision will be explored, proving the feasibility of efficient training algorithms within the chosen domain.
+
+- <ins> Chapter 5: *Data-Efficient Training Algorithms* </ins>. Training algorithms that prioritise data efficiency are then implemented, further lowering resource requirements and mitigating the computational costs of data storage and processing at data centres.
+       
+- <ins> Results \& Discussion </ins>. An analysis is made between the baseline and extended models, comparing their performance and efficiency, and discussing the overall success of the application of Green AI to finance.
+
+**Contributions to science:**
+1. *Expanding the applications of Green AI*. The application of Green AI to the financial modelling domain of volatility forecasting demonstrates the utility and importance of Green AI in lowering the environmental cost of deep learning outside of the limited existing research applications. 
+
+2. *Reducing the environmental impact of financial technology*. Demonstrating how efficient Green AI algorithms can be used to mitigate the computational and ESG costs of DL in finance, advancing sustainable finance to include the research domain of *sustainable deep learning for sustainable finance*. 
+
+3. *Improving the inclusivity of finance*. Lowering the bar-to-entry to engage in deep learning for finance, allowing more individuals to leverage financial technology and analytics.
         
-**Keywords:** Green AI, Green Deep Learning, Energy Efficiency, Data Efficiency, Sustainable Finance, Financial Technology, Financial Volatility Modelling, Long Short-Term Memory
+**Keywords:** Green AI, Energy Efficiency, Data Efficiency, Sustainable Finance, Financial Technology, Financial Volatility Modelling, Long Short-Term Memory
